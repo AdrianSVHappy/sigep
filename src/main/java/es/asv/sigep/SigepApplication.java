@@ -8,7 +8,6 @@ public class SigepApplication {
 
 	public static void main(String[] args) {
 		
-		System.out.println("Hola¿");
 		SpringApplication.run(SigepApplication.class, args);
 	}
 

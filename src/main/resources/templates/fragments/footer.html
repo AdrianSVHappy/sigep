@@ -1,0 +1,34 @@
+<div class="container text-center text-md-left" th:fragment="footer">
+  <div class="row">
+    
+    <!-- Columna 1: Nombre del sistema -->
+    <div class="col-md-4 mb-3">
+      <h5 class="text-uppercase">SIGEP</h5>
+      <p>Plataforma para la gestión de alumnos en prácticas. Facilitando la conexión entre centros, empresas y estudiantes.</p>
+    </div>
+
+    <!-- Columna 2: Enlaces rápidos -->
+    <div class="col-md-4 mb-3">
+      <h5 class="text-uppercase">Navegación</h5>
+      <ul class="list-unstyled">
+        <li><a href="/" class="text-white">Inicio</a></li>
+        <li><a th:href="@{/alumnos}" class="text-white">Lista de Alumnos</a></li>
+        <li><a th:href="@{/practicas}" class="text-white">Datos de Prácticas</a></li>
+        <li><a th:href="@{/tablon}" class="text-white">Tablón de Anuncios</a></li>
+      </ul>
+    </div>
+
+    <!-- Columna 3: Información de contacto -->
+    <div class="col-md-4 mb-3">
+      <h5 class="text-uppercase">Contacto</h5>
+      <p th:text ="${direc}"><i class="fa fa-envelope"></i> </p>
+      <p th:text ="${telef}"><i class="fa fa-phone"></i> +34 900 123 456</p>
+      <p th:text ="${email}"><i class="fa fa-map-marker"></i> Calle Ficticia 123, Ciudad, País</p>
+    </div>
+
+  </div>
+</div>
+
+<div class="text-center mt-3">
+  <small>&copy; 2025 SIGEP - Todos los derechos reservados.</small>
+</div>

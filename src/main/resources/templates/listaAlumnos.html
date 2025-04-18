@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>SIGEP</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+</head>
+<body>  
+  <!-- Navbar -->
+  <header th:insert="~{fragments/menu.html :: menu-profe}"></header>
+  
+  <!-- Contenedor principal -->
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-12">
+        <h2>Listado de Alumnos</h2>
+        <div class="list-group">
+          <a th:each="alumno : ${alumnos}" 
+             th:href="@{/alumnos/{id}(id=${alumno.id})}" 
+             class="list-group-item list-group-item-action d-flex align-items-center">
+            
+            <!-- Foto -->
+            <img th:src="@{/images/imgPerfil/{perfil} (perfil=${alumno.imagenPerfil})}" alt="Foto perfil" class="rounded-circle mr-3" width="50" height="50">
+            
+            <!-- Información -->
+            <div>
+              <strong th:text="${alumno.nombre + ' ' + alumno.apellidos}"></strong><br>
+              <small text="'Organización: ' + ${alumno.organizacion.nombre}">Organización: </small><br>
+              <small text="'Ubicación: ' + ${alumno.ubicacion.nombre}">Ubicación: </small>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Footer -->
+  <footer th:insert="~{fragments/footer.html :: footer}"  class="bg-dark text-white py-4 mt-5"></footer>
+  
+  
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <!-- Popper.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+  
+  </body>
+  </html>

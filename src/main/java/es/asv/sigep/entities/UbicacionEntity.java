@@ -1,5 +1,9 @@
 package es.asv.sigep.entities;
 
+import es.asv.sigep.enums.RolEnum;
+import lombok.Data;
+
+@Data
 public class UbicacionEntity {
 
 	String pais;

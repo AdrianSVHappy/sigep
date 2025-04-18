@@ -2,6 +2,9 @@ package es.asv.sigep.entities;
 
 import java.util.Date;
 
+import lombok.Data;
+
+@Data
 public class PracticaEntity {
 
 	private Long identificador;
@@ -23,6 +26,5 @@ public class PracticaEntity {
 	private Date fin;
 	
 	private String numeroSeguridadSocial;
-	
 	
 }

@@ -1,7 +1,11 @@
 package es.asv.sigep.entities;
 
 import es.asv.sigep.enums.RolEnum;
+import lombok.Data;
+import lombok.Setter;
 
+
+@Data
 public class PersonaEntity {
 
 	private Long id;
@@ -14,5 +18,9 @@ public class PersonaEntity {
 	
 	private UbicacionEntity ubicacion;
 	
+	private String imagenPerfil;
+	
 	private RolEnum rol;
+
+
 }

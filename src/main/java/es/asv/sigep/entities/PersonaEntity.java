@@ -31,13 +31,13 @@ public class PersonaEntity {
 	@Column(name = "ID")
 	private Long id;
 
-	@Column(name = "NOMBRE")
+	@Column(name = "NOMBRE", nullable = false)
 	private String nombre;
 
 	@Column(name = "APELLIDOS")
 	private String apellidos;
 
-	@JoinColumn(name = "ORGANIZACION", referencedColumnName = "ID")
+	@JoinColumn(name = "ORGANIZACION", referencedColumnName = "ID", nullable = false)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private OrganizacionEntity organizacion;
 
@@ -48,10 +48,10 @@ public class PersonaEntity {
 	@Column(name = "FOTO")
 	private String imagenPerfil;
 
-	@Column(name = "ROL")
+	@Column(name = "ROL", nullable = false)
 	private RolEnum rol;
 
-	@Column(name = "EMAIL")
+	@Column(name = "EMAIL", nullable = false)
 	private String email;
 
 	@Column(name = "TELEFONO")

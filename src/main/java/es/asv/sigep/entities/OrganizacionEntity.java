@@ -30,14 +30,14 @@ public class OrganizacionEntity {
 	@Column(name = "ID")
 	private Long id;
 
-	@Column(name = "NOMBRE")
+	@Column(name = "NOMBRE", nullable = false)
 	private String nombre;
 
 	@JoinColumn(name = "UBICACION", referencedColumnName = "ID")
 	@ManyToOne(fetch = FetchType.LAZY)
 	private UbicacionEntity ubicacion;
 
-	@Column(name = "TIPO")
+	@Column(name = "TIPO", nullable = false)
 	private TipoEnum tipo;
 
 }

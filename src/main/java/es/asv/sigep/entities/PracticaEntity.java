@@ -31,36 +31,36 @@ public class PracticaEntity {
 	@Column(name = "ID")
 	private Long id;
 
-	@JoinColumn(name = "ALUMNO", referencedColumnName = "ID")
+	@JoinColumn(name = "ALUMNO", referencedColumnName = "ID", nullable = false)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private PersonaEntity alumno;
 
-	@JoinColumn(name = "TUTOR", referencedColumnName = "ID")
+	@JoinColumn(name = "TUTOR", referencedColumnName = "ID", nullable = false)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private PersonaEntity tutor;
 
-	@JoinColumn(name = "RESPONSABLE", referencedColumnName = "ID")
+	@JoinColumn(name = "RESPONSABLE", referencedColumnName = "ID", nullable = false)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private PersonaEntity responsable;
 
-	@JoinColumn(name = "CENTRO", referencedColumnName = "ID")
+	@JoinColumn(name = "CENTRO", referencedColumnName = "ID", nullable = false)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private OrganizacionEntity centro;
 
-	@JoinColumn(name = "EMPRESA", referencedColumnName = "ID")
+	@JoinColumn(name = "EMPRESA", referencedColumnName = "ID", nullable = false)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private OrganizacionEntity empresa;
 
-	@Column(name = "DURACION")
+	@Column(name = "DURACION", nullable = false)
 	private int duracion;
 
-	@Column(name = "INICIO")
+	@Column(name = "INICIO", nullable = false)
 	private Date inicio;
 
 	@Column(name = "FIN")
 	private Date fin;
 
-	@Column(name = "SEGURIDADSOCIAL")
+	@Column(name = "SEGURIDADSOCIAL" , unique = true, nullable = false)
 	private String numeroSeguridadSocial;
 
 }

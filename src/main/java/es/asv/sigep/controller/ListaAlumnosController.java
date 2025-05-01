@@ -16,37 +16,11 @@ import es.asv.sigep.enums.RolEnum;
 @Controller
 public class ListaAlumnosController {
 
-	
 	@GetMapping("/alumnos")
 	public String inicio(Model model) {
-		
-		model.addAttribute("alumnos", ControllerUtils.generarAlumnosFake());
-		
+
 		ControllerUtils.modelFooter(model);
 		return "listaAlumnos";
 	}
-	
-	
-	
-	private List<PersonaEntity> genPrueba(){
-		
-		ArrayList<PersonaEntity> ret = new ArrayList<>();
 
-		for (int i = 0; i < 10; i++) {
-			PersonaEntity aux = new PersonaEntity();
-			
-			if(aux.getImagenPerfil() == null)
-				aux.setImagenPerfil("default.jpg");
-			
-			aux.setId((long) i);
-			aux.setNombre("Nombre " + i);
-			aux.setApellidos("Apellidos " + i);
-			ret.add(aux);
-		}
-		
-		return ret;
-		
-	}
-	
-	
 }

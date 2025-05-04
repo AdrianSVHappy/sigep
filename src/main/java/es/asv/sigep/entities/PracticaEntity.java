@@ -62,5 +62,4 @@ public class PracticaEntity {
 
 	@Column(name = "SEGURIDADSOCIAL" , unique = true, nullable = false)
 	private String numeroSeguridadSocial;
-
 }

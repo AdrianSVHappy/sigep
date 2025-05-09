@@ -16,7 +16,7 @@
           <h2>Listado de Prácticas</h2>
           <div class="list-group">
             <a th:each="practica : ${practicas}"
-               th:href="@{/practicas/{id}(id=${practica.identificador})}"
+               th:href="@{/practicas/{id}(id=${practica.id})}"
                class="list-group-item list-group-item-action">
 
               <div class="d-flex justify-content-between align-items-center">

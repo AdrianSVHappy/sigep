@@ -1,7 +1,10 @@
 package es.asv.sigep.entities;
 
+import es.asv.sigep.converter.enums.TipoEnumConvert;
 import es.asv.sigep.enums.TipoEnum;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Converter;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -38,6 +41,7 @@ public class OrganizacionEntity {
 	private UbicacionEntity ubicacion;
 
 	@Column(name = "TIPO", nullable = false)
+	@Convert(converter = TipoEnumConvert.class)
 	private TipoEnum tipo;
 
 }

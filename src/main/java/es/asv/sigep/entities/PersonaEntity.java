@@ -1,7 +1,9 @@
 package es.asv.sigep.entities;
 
+import es.asv.sigep.converter.enums.RolEnumConvert;
 import es.asv.sigep.enums.RolEnum;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -49,6 +51,7 @@ public class PersonaEntity {
 	private String imagenPerfil;
 
 	@Column(name = "ROL", nullable = false)
+	@Convert(converter = RolEnumConvert.class)
 	private RolEnum rol;
 
 	@Column(name = "EMAIL", nullable = false)

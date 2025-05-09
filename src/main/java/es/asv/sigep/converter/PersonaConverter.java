@@ -1,6 +1,7 @@
 package es.asv.sigep.converter;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Component;
 
 import es.asv.sigep.dto.OrganizacionDTO;
 import es.asv.sigep.dto.PersonaDTO;
@@ -9,14 +10,14 @@ import es.asv.sigep.entities.OrganizacionEntity;
 import es.asv.sigep.entities.PersonaEntity;
 import es.asv.sigep.entities.UbicacionEntity;
 
+@Component
 public class PersonaConverter {
 
-	
 	/**
 	 * PersonaEntity -> PersonaDTO
 	 * 
 	 * @param entity PersonaEntity
-	 * @return PersonaDTO	
+	 * @return PersonaDTO
 	 */
 	public PersonaDTO convert(PersonaEntity entity) {
 
@@ -24,19 +25,19 @@ public class PersonaConverter {
 		if (entity != null) {
 			dto = new PersonaDTO();
 			BeanUtils.copyProperties(entity, dto);
-			
+
 			if (entity.getOrganizacion() != null) {
-				OrganizacionDTO org = null;
+				OrganizacionDTO org = new OrganizacionDTO();
 				BeanUtils.copyProperties(entity.getOrganizacion(), org);
 				dto.setOrganizacion(org);
 			}
-			
+
 			if (entity.getUbicacion() != null) {
-				UbicacionDTO ubi = null;
+				UbicacionDTO ubi = new UbicacionDTO();
 				BeanUtils.copyProperties(entity.getUbicacion(), ubi);
 				dto.setUbicacion(ubi);
 			}
-			
+
 		}
 
 		return dto;
@@ -54,23 +55,22 @@ public class PersonaConverter {
 		if (dto != null) {
 			entity = new PersonaEntity();
 			BeanUtils.copyProperties(entity, dto);
-			
-			
+
 			if (dto.getOrganizacion() != null) {
-				OrganizacionEntity org = null;
+				OrganizacionEntity org = new OrganizacionEntity();
 				BeanUtils.copyProperties(org, dto.getOrganizacion());
 				entity.setOrganizacion(org);
 			}
-			
+
 			if (dto.getUbicacion() != null) {
-				UbicacionEntity ubi = null;
+				UbicacionEntity ubi = new UbicacionEntity();
 				BeanUtils.copyProperties(ubi, dto.getUbicacion());
 				entity.setUbicacion(ubi);
 			}
-			
+
 		}
 
 		return entity;
 	}
-	
+
 }

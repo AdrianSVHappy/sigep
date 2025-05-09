@@ -26,7 +26,7 @@ public class OrganizacionConverter {
 			BeanUtils.copyProperties(entity, dto);
 
 			if (entity.getUbicacion() != null) {
-				UbicacionDTO ubi = null;
+				UbicacionDTO ubi = new UbicacionDTO();
 				BeanUtils.copyProperties(entity.getUbicacion(), ubi);
 				dto.setUbicacion(ubi);
 			}
@@ -50,7 +50,7 @@ public class OrganizacionConverter {
 			BeanUtils.copyProperties(entity, dto);
 
 			if (dto.getUbicacion() != null) {
-				UbicacionEntity ubi = null;
+				UbicacionEntity ubi = new UbicacionEntity();
 				BeanUtils.copyProperties(ubi, dto.getUbicacion());
 				entity.setUbicacion(ubi);
 			}

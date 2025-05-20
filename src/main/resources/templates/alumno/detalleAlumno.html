@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>SIGEP</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+</head>
+
+<body>
+	<!-- Navbar -->
+	<header th:insert="~{fragments/menu.html :: menu-profe}"></header>
+
+	<!-- Contenedor principal -->
+	<div class="container mt-5">
+		<h2>Detalle del Alumno</h2>
+
+		<div class="card mt-4">
+			<div class="card-body">
+
+				<!-- Imagen de Perfil -->
+				<div class="mb-3 text-center">
+					<img th:src="@{/images/imgPerfil/{perfil} (perfil=${alumno.imagenPerfil})}"
+						onerror="this.onerror=null;this.src='/images/imgPerfil/default.jpg';" alt="Imagen de Perfil"
+						class="img-thumbnail" width="250">
+				</div>
+
+				<p><strong>Nombre:</strong> <span th:text="${alumno.nombre}"></span></p>
+				<p><strong>Apellidos:</strong> <span th:text="${alumno.apellidos}"></span></p>
+				<p><strong>Email:</strong> <span th:text="${alumno.email}"></span></p>
+				<p><strong>Teléfono:</strong> <span th:text="${alumno.telefono}"></span></p>
+
+				<p><strong>Organización:</strong> <span th:text="${alumno.organizacion?.nombre}"></span>
+				</p>
+				<p><strong>Ubicación:</strong> <span th:text="${alumno.ubicacion?.ciudad}"></span></p>
+
+				<a th:href="@{/alumno/alumnos}" class="btn btn-secondary mt-3">Volver</a>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Footer -->
+	<footer th:insert="~{fragments/footer.html :: footer}" class="bg-dark text-white py-4 mt-5"></footer>
+
+
+	<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	<!-- Popper.js -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<!-- Bootstrap JS -->
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

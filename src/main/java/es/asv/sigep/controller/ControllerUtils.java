@@ -42,5 +42,21 @@ public class ControllerUtils {
 		model.addAttribute("direc", direc);
 
 	}
+	
+	
+	public static String mostarError(int error, Model model) {
+		
+		model.addAttribute("codigo", error);
+		
+		switch (error) {
+		case 0: {
+			model.addAttribute("mensaje", "No tiene permiso para entrar en esta página");
+			return "vistaError";
+		}
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + error);
+		}
+		
+	}
 
 }

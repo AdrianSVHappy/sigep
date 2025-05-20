@@ -12,6 +12,8 @@ import es.asv.sigep.entities.PracticaEntity;
 public interface PracticaRepository extends JpaRepository<PracticaEntity, Long>{
 
 	 List<PracticaEntity> findAllByTutor(PersonaEntity tutor);
-	
+
+	boolean existsByTutorAndAlumno(PersonaEntity tutor, PersonaEntity alumno);
+
 
 }

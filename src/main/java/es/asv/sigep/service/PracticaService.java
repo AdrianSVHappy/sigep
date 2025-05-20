@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import es.asv.sigep.SigepApplication;
 import es.asv.sigep.converter.PersonaConverter;
 import es.asv.sigep.converter.PracticaConverter;
 import es.asv.sigep.converter.UbicacionConverter;
@@ -19,6 +19,8 @@ import es.asv.sigep.repository.PracticaRepository;
 @Service
 public class PracticaService {
 
+    private final SigepApplication sigepApplication;
+
 	@Autowired
 	private PracticaRepository practicaRepository;
 
@@ -27,6 +29,10 @@ public class PracticaService {
 
 	@Autowired
 	private PersonaRepository personaRepository;
+
+    PracticaService(SigepApplication sigepApplication) {
+        this.sigepApplication = sigepApplication;
+    }
 
 	public List<PracticaDTO> findAllByTutor(Long tutorId) {
 
@@ -42,6 +48,47 @@ public class PracticaService {
 		}
 		return listaDto;
 
+	}
+
+	public boolean existsByTutorAndAlumno(Long idTutor, Long idAlumno) {
+		
+		
+		PersonaEntity tutor = null;
+		
+		//SI existe el tutor
+		if((idTutor != null) && (personaRepository.findById(idTutor) != null)) {
+			tutor = personaRepository.findById(idTutor).orElse(null);
+		}else {
+			return false;
+		}
+		
+		
+		PersonaEntity alumno = null;
+		
+		//SI eexiste el alumno
+		if((idAlumno != null) && (personaRepository.findById(idAlumno) != null)) {
+		 alumno = personaRepository.findById(idAlumno).orElse(null);
+		}else {
+			return false;
+		}
+		
+		//SI el tutor gestiona la practica del alumno
+		return practicaRepository.existsByTutorAndAlumno(tutor, alumno);
+	}
+
+	public PracticaDTO findById(Long id) {
+		
+		PracticaEntity practica = null;
+		
+		//Si el id no es nulo
+		if(id != null ) {
+			
+			practica = practicaRepository.findById(id).orElse(null);
+			
+		}
+		
+			
+		return practicaConverter.convert(practica);
 	}
 
 }

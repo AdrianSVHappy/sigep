@@ -16,11 +16,11 @@
         <h2>Listado de Alumnos</h2>
         <div class="list-group">
           <a th:each="alumno : ${alumnos}" 
-             th:href="@{/alumnos/{id}(id=${alumno.id})}" 
+             th:href="@{/alumno/detalle/{id}(id=${alumno.id})}" 
              class="list-group-item list-group-item-action d-flex align-items-center">
             
             <!-- Foto -->
-            <img th:src="@{/images/imgPerfil/{perfil} (perfil=${alumno.imagenPerfil})}" alt="Foto perfil" class="rounded-circle mr-3" width="50" height="50">
+            <img th:src="@{/images/imgPerfil/{perfil} (perfil=${alumno.imagenPerfil})}"  onerror="this.onerror=null;this.src='/images/imgPerfil/default.jpg';"  alt="Foto perfil" class="rounded-circle mr-3" width="50" height="50">
             
             <!-- Información -->
             <div>

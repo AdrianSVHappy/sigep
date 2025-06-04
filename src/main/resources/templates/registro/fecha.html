@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>SIGEP</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+</head>
+
+<body class="d-flex flex-column" style="min-height: 100vh;">
+	<!-- Menu -->
+	<header th:insert="~{fragments/menuAlumno.html :: menu-alumno}"
+		th:if="${persona.rol == T(es.asv.sigep.enums.RolEnum).E}"></header>
+
+
+	<!-- Contenido principal -->
+	<div class="container mt-5 flex-grow-1">
+		<h2 th:text="'Formulario de Registro - ' + ${registro.dia} + '/' + ${	registro.mes} + '/' + ${registro.anio}">
+		</h2>
+
+		<form th:if="${registro.registrable}" th:action="@{/registro}" method="post">
+			<!-- Horas -->
+			<div class="row mb-3">
+				<div class="col">
+					<label for="horaInicio" class="form-label">Hora Inicio</label>
+					<input type="time" class="form-control" id="horaInicio" name="horaInicio"
+						th:value="${registro.horaInicio}" th:readonly="${!registro.registrable}">
+				</div>
+				<div class="col">
+					<label for="horaFin" class="form-label">Hora Fin</label>
+					<input type="time" class="form-control" id="horaFin" name="horaFin" th:value="${registro.horaFin}"
+						th:readonly="${!registro.registrable}">
+				</div>
+			</div>
+
+			<!-- Horas 2 -->
+			<div class="row mb-3">
+				<div class="col">
+					<label for="horaInicio2" class="form-label">Hora Inicio 2</label>
+					<input type="time" class="form-control" id="horaInicio2" name="horaInicio2"
+						th:value="${registro.horaInicio2}" th:readonly="${!registro.registrable}">
+				</div>
+				<div class="col">
+					<label for="horaFin2" class="form-label">Hora Fin 2</label>
+					<input type="time" class="form-control" id="horaFin2" name="horaFin2"
+						th:value="${registro.horaFin2}" th:readonly="${!registro.registrable}">
+				</div>
+			</div>
+
+			<!-- Texto -->
+			<div class="mb-3">
+				<label for="texto" class="form-label">Texto</label>
+				<textarea class="form-control" id="texto" name="texto" rows="3" th:text="${registro.texto}"
+					th:readonly="${!registro.registrable}"></textarea>
+			</div>
+
+
+			<div class="d-flex justify-content-between">
+				<a th:href="@{/registro/calendario}" class="btn btn-secondary">Volver</a>
+
+				<button type="submit" class="btn btn-primary"
+					th:text="${registro.registrado} ? 'Actualizar' : 'Registrar'"></button>
+			</div>
+		</form>
+
+		<!-- Si no es registrable -->
+		<div th:unless="${registro.registrable}" class="mt-4">
+			<a th:href="@{/registro/calendario}" class="btn btn-secondary">Volver</a>
+		</div>
+
+	</div>
+
+
+	<!-- Footer -->
+	<footer th:insert="~{fragments/footer.html :: footer-alumno}" class="bg-dark text-white py-4 mt-5"></footer>
+
+
+	<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	<!-- Popper.js -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<!-- Bootstrap JS -->
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

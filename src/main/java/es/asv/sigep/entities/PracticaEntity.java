@@ -1,6 +1,9 @@
 package es.asv.sigep.entities;
 
+import java.time.LocalDate;
 import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -54,12 +57,14 @@ public class PracticaEntity {
 	@Column(name = "DURACION", nullable = false)
 	private int duracion;
 
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "INICIO", nullable = false)
-	private Date inicio;
+	private LocalDate inicio;
 
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "FIN")
-	private Date fin;
+	private LocalDate fin;
 
-	@Column(name = "SEGURIDADSOCIAL" , unique = true, nullable = false)
+	@Column(name = "SEGURIDADSOCIAL" , unique = true, nullable = false, length = 12)
 	private String numeroSeguridadSocial;
 }

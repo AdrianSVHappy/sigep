@@ -22,9 +22,8 @@ public class ControllerUtils {
 
 	public static void iniciarUsuario(Long id, PersonaService personaService) {
 
-		if (usuarioAux == null) {
-			usuarioAux = personaService.findById(id);
-		}
+		usuarioAux = personaService.findById(id);
+	
 	}
 
 	public static PersonaDTO obtenerUsuario() {
@@ -44,6 +43,15 @@ public class ControllerUtils {
 	}
 	
 	
+	public static void modelPersona(Model model) {
+		
+		if(usuarioAux != null) {
+			model.addAttribute("persona", usuarioAux);
+		}
+		
+	}
+	
+	
 	public static String mostarError(int error, Model model) {
 		
 		model.addAttribute("codigo", error);
@@ -57,6 +65,27 @@ public class ControllerUtils {
 			throw new IllegalArgumentException("Unexpected value: " + error);
 		}
 		
+	}
+	
+	
+	public static String traducirMes(int codMes) {
+		
+		  ArrayList<String> meses = new ArrayList<>();
+		  
+	        meses.add("Enero");
+	        meses.add("Febrero");
+	        meses.add("Marzo");
+	        meses.add("Abril");
+	        meses.add("Mayo");
+	        meses.add("Junio");
+	        meses.add("Julio");
+	        meses.add("Agosto");
+	        meses.add("Septiembre");
+	        meses.add("Octubre");
+	        meses.add("Noviembre");
+	        meses.add("Diciembre");
+
+	        return meses.get(codMes - 1);
 	}
 
 }

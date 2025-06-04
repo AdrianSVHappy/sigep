@@ -23,7 +23,7 @@ import es.asv.sigep.service.PracticaService;
 
 @Controller
 @RequestMapping("/alumno")
-public class ListaAlumnosController {
+public class AlumnosController {
 
 	
 	@Autowired
@@ -42,6 +42,7 @@ public class ListaAlumnosController {
 	private String mostrarTabla(Model model) {
 
 		ControllerUtils.modelFooter(model);
+		ControllerUtils.modelPersona(model);
 		
 		return "alumno/listaAlumnos";
 	}
@@ -55,7 +56,9 @@ public class ListaAlumnosController {
 	private String mostrarDetalle(PersonaDTO alumno, Model model) {
 		
 		ControllerUtils.modelFooter(model);
+		ControllerUtils.modelPersona(model);
 		model.addAttribute("alumno", alumno);
+
 		
 		return "alumno/detalleAlumno";
 	}

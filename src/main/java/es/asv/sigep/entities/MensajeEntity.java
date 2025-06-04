@@ -1,10 +1,11 @@
 package es.asv.sigep.entities;
 
-import es.asv.sigep.converter.enums.TipoEnumConvert;
-import es.asv.sigep.enums.TipoEnum;
+import java.time.LocalDateTime;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import es.asv.sigep.dto.PersonaDTO;
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Converter;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -20,28 +21,35 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "ORGANIZACIONES")
+@Table(name = "MENSAJES")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OrganizacionEntity {
+public class MensajeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID")
 	private Long id;
-
-	@Column(name = "NOMBRE", nullable = false, length = 50)
-	private String nombre;
-
-	@JoinColumn(name = "UBICACION", referencedColumnName = "ID")
+	
+	@JoinColumn(name = "AUTOR", referencedColumnName = "ID", nullable = false)
 	@ManyToOne(fetch = FetchType.LAZY)
-	private UbicacionEntity ubicacion;
-
-	@Column(name = "TIPO", nullable = false)
-	@Convert(converter = TipoEnumConvert.class)
-	private TipoEnum tipo;
-
+	private PersonaEntity autor;
+	
+	@JoinColumn(name = "RECEPTOR", referencedColumnName = "ID", nullable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	private PersonaEntity receptor;
+	
+	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
+	@Column(name = "FECHA", nullable = false)
+	private LocalDateTime fecha;
+	
+	@Column(name = "ASUNTO", length = 50)
+	private String asunto;
+	
+	@Column(name = "TEXTO", length = 200)
+	private String texto;
+	
 }

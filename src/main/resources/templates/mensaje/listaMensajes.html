@@ -8,50 +8,50 @@
 </head>
 
 <body class="d-flex flex-column" style="min-height: 100vh;">
+
 	<!-- Navbar -->
 	<header th:insert="~{fragments/menu.html :: menu-profe}" th:if="${persona.rol == T(es.asv.sigep.enums.RolEnum).P}">
 	</header>
 	<header th:insert="~{fragments/menuAlumno.html :: menu-alumno}"
 		th:if="${persona.rol == T(es.asv.sigep.enums.RolEnum).E}"></header>
 
-	<!-- Contenedor principal -->
+	<!-- Contenido principal -->
 	<div class="container mt-5 flex-grow-1">
-		<h2>Detalle del Alumno</h2>
+		<h1>Mensajes</h1>
 
-		<div class="card mt-4">
-			<div class="card-body">
+		<div class="list-group">
+			<div th:each="mensaje : ${listaMensajes}"
+				th:classappend="${mensaje.autor.id} == ${persona.id} ? 'bg-light border-primary' : ''"
+				class="list-group-item list-group-item-action mb-3 border rounded shadow-sm">
 
-				<!-- Imagen de Perfil -->
-				<div class="mb-3 text-center">
-					<img th:src="@{/images/imgPerfil/{perfil} (perfil=${alumno.imagenPerfil})}"
-						onerror="this.onerror=null;this.src='/images/imgPerfil/default.jpg';" alt="Imagen de Perfil"
-						class="img-thumbnail" width="250">
+				<!-- Cabecera del mensaje -->
+				<div class="d-flex justify-content-between">
+					<h5 th:text="${mensaje.asunto}" class="mb-1"></h5>
+					<small th:text="${#temporals.format(mensaje.fecha, 'dd/MM/yyyy HH:mm')}"></small>
 				</div>
 
-				<p><strong>Nombre:</strong> <span th:text="${alumno.nombre}"></span></p>
-				<p><strong>Apellidos:</strong> <span th:text="${alumno.apellidos}"></span></p>
-				<p><strong>Email:</strong> <span th:text="${alumno.email}"></span></p>
-				<p><strong>Teléfono:</strong> <span th:text="${alumno.telefono}"></span></p>
-
-				<p><strong>Organización:</strong> <span th:text="${alumno.organizacion?.nombre}"></span>
+				<!-- Información del autor y receptor -->
+				<p class="mb-1">
+					<strong>De:</strong>
+					<span th:text="${mensaje.autor.nombre} + ' ' + (${mensaje.autor.apellidos} ?: '')"></span>
+					<br /><strong>Para:</strong>
+					<span th:text="${mensaje.receptor.nombre} + ' ' + (${mensaje.receptor.apellidos} ?: '')"></span>
 				</p>
-				<p><strong>Ubicación:</strong> <span th:text="${alumno.ubicacion?.ciudad}"></span></p>
 
-				<a th:href="@{/alumno/alumnos}" class="btn btn-secondary mt-3"
-					th:if="${persona.rol == T(es.asv.sigep.enums.RolEnum).P}">Volver</a>
-				<a th:href="@{/}" class="btn btn-secondary mt-3"
-					th:if="${persona.rol == T(es.asv.sigep.enums.RolEnum).E}">Volver</a>
+				<!-- Texto del mensaje -->
+				<p th:text="${mensaje.texto}" class="mb-2"></p>
+
+				<!-- Botón de responder -->
+				<a th:href="@{'#'}" class="btn btn-sm btn-outline-primary">Responder</a>
 			</div>
 		</div>
 	</div>
-
 
 	<!-- Footer -->
 	<footer th:insert="~{fragments/footer.html :: footer}" class="bg-dark text-white py-4 mt-5"
 		th:if="${persona.rol == T(es.asv.sigep.enums.RolEnum).P}"></footer>
 	<footer th:insert="~{fragments/footer.html :: footer-alumno}" class="bg-dark text-white py-4 mt-5"
 		th:if="${persona.rol == T(es.asv.sigep.enums.RolEnum).E}"></footer>
-
 
 	<!-- jQuery -->
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>

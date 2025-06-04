@@ -33,10 +33,10 @@ public class PersonaEntity {
 	@Column(name = "ID")
 	private Long id;
 
-	@Column(name = "NOMBRE", nullable = false)
+	@Column(name = "NOMBRE", nullable = false, length = 50)
 	private String nombre;
 
-	@Column(name = "APELLIDOS")
+	@Column(name = "APELLIDOS", length = 100)
 	private String apellidos;
 
 	@JoinColumn(name = "ORGANIZACION", referencedColumnName = "ID", nullable = false)
@@ -57,7 +57,7 @@ public class PersonaEntity {
 	@Column(name = "EMAIL", nullable = false)
 	private String email;
 
-	@Column(name = "TELEFONO")
+	@Column(name = "TELEFONO", length = 14)
 	private String telefono;
 
 }

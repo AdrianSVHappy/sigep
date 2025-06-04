@@ -24,9 +24,35 @@ public class HomeController {
 
 		ControllerUtils.modelFooter(model);
 	
-		ControllerUtils.iniciarUsuario(1L, personaService);
+		//TODO Cambiarlo por sistema de inicio se deción
+		if(ControllerUtils.obtenerUsuario() == null)
+			ControllerUtils.iniciarUsuario(1L, personaService);
+		
+		
+		ControllerUtils.modelPersona(model);
 		
 		return "home";
+	}
+	
+	
+	/**
+	 * Metodo para cambiar del usuario profesor al alumno y viceverza 
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("/cambiarUsuario")
+	public String cambiar(Model model) {
+		
+		if(1L == ControllerUtils.obtenerUsuario().getId())
+			ControllerUtils.iniciarUsuario(3L, personaService);
+		else
+			ControllerUtils.iniciarUsuario(1L, personaService);
+			
+		ControllerUtils.modelFooter(model);
+		ControllerUtils.modelPersona(model);
+		
+		return "home";
+		
 	}
 	
 }

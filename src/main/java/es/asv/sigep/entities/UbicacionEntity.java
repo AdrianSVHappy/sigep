@@ -26,19 +26,19 @@ public class UbicacionEntity {
 	@Column(name = "ID")
 	private Long id;
 
-	@Column(name = "PAIS")
+	@Column(name = "PAIS" , length = 50)
 	private String pais;
 
-	@Column(name = "COMUNIDAD")
+	@Column(name = "COMUNIDAD", length = 50)
 	private String comunidad;
 
-	@Column(name = "PROVINCIA")
+	@Column(name = "PROVINCIA", length = 50)
 	private String provincia;
 
-	@Column(name = "CIUDAD")
+	@Column(name = "CIUDAD", length = 100)
 	private String ciudad;
 
-	@Column(name = "CODIGO_POSTAL")
+	@Column(name = "CODIGO_POSTAL", length = 5)
 	private String codigoPostal;
 
 	@Column(name = "DIRECCION")

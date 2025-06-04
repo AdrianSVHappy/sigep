@@ -77,7 +77,6 @@ public class PracticaService {
 	}
 
 	public PracticaDTO findById(Long id) {
-		
 		PracticaEntity practica = null;
 		
 		//Si el id no es nulo
@@ -87,8 +86,19 @@ public class PracticaService {
 			
 		}
 		
-			
 		return practicaConverter.convert(practica);
 	}
 
+	public PracticaDTO findByAlumno(Long alumnoId) {
+		PracticaEntity practica = null;
+		PersonaEntity alumno = personaRepository.findById(alumnoId).orElse(null);
+		
+		//Si el alumno no es nulo
+		if(alumno != null) {
+			practica = practicaRepository.findByAlumno(alumno).orElse(null);
+		}
+		
+		return practicaConverter.convert(practica);
+	}
+	
 }

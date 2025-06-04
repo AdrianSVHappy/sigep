@@ -1,6 +1,6 @@
 package es.asv.sigep.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import lombok.Data;
 
@@ -21,9 +21,9 @@ public class PracticaDTO {
 
 	private int duracion;
 
-	private Date inicio;
+	private LocalDate inicio;
 
-	private Date fin;
+	private LocalDate fin;
 
 	private String numeroSeguridadSocial;
 }

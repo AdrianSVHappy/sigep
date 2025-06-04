@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>SIGEP</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+</head>
+
+<body>
+	<!-- Navbar -->>
+	<header th:insert="~{fragments/menuAlumno.html :: menu-alumno}"></header>
+
+	<!-- Contenido principal -->
+	<div class="container my-5">
+
+
+		<!-- Datos de la Práctica -->
+		<div class="card mb-4">
+			<div class="card-header bg-primary text-white">Datos de la Práctica</div>
+			<div class="card-body">
+				<p><strong>Consumido:</strong> <span
+						th:text="${consumido + ' h / ' + practica.duracion + ' h'}"></span></p>
+				<p><strong>Fecha de Inicio:</strong> <span
+						th:text="${practica.inicio.format(T(java.time.format.DateTimeFormatter).ofPattern('dd/MM/yyyy'))}"></span>
+				</p>
+				<p><strong>Fecha de Fin:</strong> <span
+						th:text="${practica.fin.format(T(java.time.format.DateTimeFormatter).ofPattern('dd/MM/yyyy'))}"></span>
+				</p>
+				<p><strong>Número de la Seguridad Social:</strong> <span
+						th:text="${practica.numeroSeguridadSocial}"></span></p>
+			</div>
+		</div>
+
+		
+		<div th:each="mes : ${calendario}">
+			<h3 class="mb-3 text-center text-primary"
+				th:text="${T(es.asv.sigep.controller.ControllerUtils).traducirMes(mes.key)}"></h3>
+
+			<div class="table-responsive">
+				<table class="table text-center align-middle shadow-sm">
+					<thead class="table-primary">
+						<tr>
+							<th>L</th>
+							<th>M</th>
+							<th>X</th>
+							<th>J</th>
+							<th>V</th>
+							<th class="bg-light">S</th>
+							<th class="bg-light">D</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="semana : ${mes.value}">
+							<td th:each="dia : ${semana}">
+
+								<!-- Dia no valido -->
+								<button th:if="${dia != null and !dia.registrable}" th:text="${dia.dia}"
+									class="btn text-white bg-dark btn-block" disabled>
+								</button>
+
+								<a th:if="${dia != null}" th:href="@{/registro/fecha/{fecha}(fecha=${dia.fecha})}">
+
+									<!-- Dia pasado -->
+									<button
+										th:if="${dia != null and dia.registrable and !dia.registrado and dia.fecha < hoy}"
+										th:text="${dia.dia}" class="btn bg-warning btn-block">
+									</button>
+
+
+									<!-- Dia Registrado -->
+									<button th:if="${dia != null and dia.registrado}" th:text="${dia.dia}"
+										class="btn bg-success text-white btn-block">
+									</button>
+
+									<!-- Dia actual -->
+									<button
+										th:if="${dia != null and dia.registrable and !dia.registrado and dia.fecha == hoy}"
+										th:text="${dia.dia}" class="btn bg-primary text-white btn-block">
+									</button>
+
+									<!-- Dias futuros -->
+									<button
+										th:if="${dia != null and dia.registrable and !dia.registrado and dia.fecha > hoy}"
+										th:text="${dia.dia}" class="btn bg-white btn-block">
+									</button>
+
+								</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<!-- Footer -->
+	<footer th:insert="~{fragments/footer.html :: footer-alumno}" class="bg-dark text-white py-4 mt-5"></footer>
+
+	<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	<!-- Popper.js -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<!-- Bootstrap JS -->
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

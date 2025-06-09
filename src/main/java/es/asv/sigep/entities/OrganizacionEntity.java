@@ -2,6 +2,7 @@ package es.asv.sigep.entities;
 
 import es.asv.sigep.converter.enums.TipoEnumConvert;
 import es.asv.sigep.enums.TipoEnum;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Converter;

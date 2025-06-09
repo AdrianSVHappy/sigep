@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>SIGEP</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+</head>
+
+<body class="d-flex flex-column" style="min-height: 100vh;">
+	<!--Menu-->
+	<header th:insert="~{fragments/menu.html :: menu-profe}"></header>
+
+	<!-- Contenido principal -->
+	<div class="container mt-5 flex-grow-1">
+		<h2>Nueva practica</h2>
+
+		<form th:action="@{/practica/guardar}" method="post" th:object="${practicaForm}">
+
+			<!--Datos de la practica -->
+			<div class="mb-5 border rounded p-4 shadow-sm">
+				<h4>General</h4>
+
+				<div class="mb-3">
+					<label for="duracion" class="form-label">Duración (h)</label>
+					<input type="number" th:field="*{duracion}" class="form-control" id="duracion" min="0	" required/>
+				</div>
+				
+				<div class="row mb-3">
+				  <div class="col-md-6">
+				    <label for="inicio" class="form-label">Inicio</label>
+				    <input type="date" th:field="*{inicio}" class="form-control" id="inicio" required />
+				  </div>
+
+				  <div class="col-md-6">
+				    <label for="fin" class="form-label">Fin</label>
+				    <input type="date" th:field="*{fin}" class="form-control" id="fin" required />
+				  </div>
+				</div>
+				
+				<div class="mb-3">
+					<label for="nss" class="form-label">Número de la Seguridad Social</label>
+					<input type="text" th:field="*{numeroSeguridadSocial}" class="form-control" id="nss" />
+				</div>
+
+
+			</div>
+
+			<!--Datos del alumno -->
+			<div class="mb-5 border rounded p-4 shadow-sm">
+				<h4>Alumno</h4>
+
+				<div class="mb-3">
+					<label for="aEmail" class="form-label">Email</label>
+					<input type="email" th:field="*{alumno.email}" class="form-control" id="aEmail" />
+				</div>
+
+			</div>
+
+			<!-- Datos del responsable -->
+			<div class="mb-5 border rounded p-4 shadow-sm">
+				<h4>Responsable</h4>
+
+				<!-- Lista de responsables guardados-->
+				<div class="form-group">
+					<label for="responsable">Responsable</label>
+					<select th:field="*{responsable.id}" class="form-control" id="responsable">
+						<option value="" selected>Nuevo responsable</option>
+						<option th:each="res : ${listaResponsables}" th:value="${res.id}"
+							th:text="${res.nombre + ' - ' + res.organizacion.nombre}">
+						</option>
+					</select>
+				</div>
+
+
+				<!--Campos para el nuevo responsables-->
+				<div class="mb-3">
+					<label for="rNombre" class="form-label">Nombre</label>
+					<input type="text" th:field="*{responsable.nombre}" class="form-control" id="rNombre" />
+				</div>
+
+				<div class="mb-3">
+					<label for="rApellidos" class="form-label">Apellidos</label>
+					<input type="text" th:field="*{responsable.apellidos}" class="form-control" id="rApellidos" />
+				</div>
+
+				<div class="mb-3">
+					<label for="rEmail" class="form-label">Email</label>
+					<input type="email" th:field="*{responsable.email}" class="form-control" id="rEmail" />
+				</div>
+
+				<div class="mb-3">
+					<label for="rTelefono" class="form-label">Teléfono</label>
+					<input type="tel" th:field="*{responsable.telefono}" class="form-control" id="rTelefono" />
+				</div>
+
+			</div>
+
+
+			<!-- Datos de la empresa -->
+			<div class="mb-5 border rounded p-4 shadow-sm">
+				<h4>Empresa</h4>
+
+				<!-- Lista de empresas guardadas-->
+				<div class="form-group">
+					<label for="empresas">Empresas</label>
+					<select th:field="*{empresa.id}" class="form-control" id="empresa">
+						<option value="" selected>Nueva empresa</option>
+						<option th:each="emp : ${listaEmpresas}" th:value="${emp.id}" th:text="${emp.nombre}">
+						</option>
+					</select>
+				</div>
+
+
+				<!--Campos para la nueva empresa-->
+
+				<div class="mb-3">
+					<label for="eNombre" class="form-label">Nombre</label>
+					<input type="text" th:field="*{empresa.nombre}" class="form-control" id="rNombre" />
+				</div>
+
+				<div class="mb-3">
+					<label for="ePais" class="form-label">País</label>
+					<input type="text" th:field="*{empresa.ubicacion.pais}" class="form-control" id="ePais" />
+				</div>
+
+				<div class="mb-3">
+					<label for="eComunidad" class="form-label">Comunidad</label>
+					<input type="text" th:field="*{empresa.ubicacion.comunidad}" class="form-control" id="eComunidad" />
+				</div>
+
+				<div class="mb-3">
+					<label for="eProvincia" class="form-label">Provincia</label>
+					<input type="text" th:field="*{empresa.ubicacion.provincia}" class="form-control" id="eProvincia" />
+				</div>
+
+				<div class="mb-3">
+					<label for="eCiudad" class="form-label">Ciudad</label>
+					<input type="text" th:field="*{empresa.ubicacion.ciudad}" class="form-control" id="eCiudad" />
+				</div>
+
+				<div class="mb-3">
+					<label for="eCodigoPostal" class="form-label">Código Postal</label>
+					<input type="text" th:field="*{empresa.ubicacion.codigoPostal}" class="form-control"
+						id="eCodigoPostal" />
+				</div>
+
+				<div class="mb-3">
+					<label for="eDireccion" class="form-label">Dirección</label>
+					<input type="text" th:field="*{empresa.ubicacion.direccion}" class="form-control" id="eDireccion" />
+				</div>
+
+			</div>
+
+
+			<div class="d-flex justify-content-between">
+				<a th:href="@{/practica/practicas}" class="btn btn-secondary">Volver</a>
+
+				<button type="submit" class="btn btn-primary">Guardar</button>
+			</div>
+		</form>
+
+	</div>
+
+	<!-- Footer -->
+	<footer th:insert="~{fragments/footer.html :: footer}" class="bg-dark text-white py-4 mt-5"></footer>
+
+
+	<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	<!-- Popper.js -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<!-- Bootstrap JS -->
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

@@ -16,6 +16,13 @@
 		<div class="row">
 			<div class="col-12">
 				<h2>Listado de Prácticas</h2>
+				
+				<!-- Nuevo -->
+				<div class="text-right mb-3">
+					<a th:href="@{'/practica/nueva'}" class="btn btn-sm btn-outline-primary">Nueva practica</a>
+				</div>
+				
+				
 				<div class="list-group">
 					<a th:each="practica : ${practicas}" th:href="@{/practica/detalle/{id}(id=${practica.id})}"
 						class="list-group-item list-group-item-action">

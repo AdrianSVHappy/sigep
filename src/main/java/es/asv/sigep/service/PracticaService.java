@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import es.asv.sigep.SigepApplication;
+import es.asv.sigep.controller.PracticasController;
 import es.asv.sigep.converter.PersonaConverter;
 import es.asv.sigep.converter.PracticaConverter;
 import es.asv.sigep.converter.UbicacionConverter;
@@ -19,24 +20,27 @@ import es.asv.sigep.repository.PracticaRepository;
 @Service
 public class PracticaService {
 
-    private final SigepApplication sigepApplication;
+	@Autowired
+	private PersonaService personaService;
+
+	@Autowired
+	private OrganizacionService organizacionService;
 
 	@Autowired
 	private PracticaRepository practicaRepository;
 
 	@Autowired
+	private PersonaRepository personaRepository;
+
+	@Autowired
 	private PracticaConverter practicaConverter;
 
 	@Autowired
-	private PersonaRepository personaRepository;
+	private PersonaConverter personaConverter;
 
-    PracticaService(SigepApplication sigepApplication) {
-        this.sigepApplication = sigepApplication;
-    }
+	public List<PracticaDTO> findAllByTutor(PersonaDTO tutorDto) {
 
-	public List<PracticaDTO> findAllByTutor(Long tutorId) {
-
-		PersonaEntity tutor = personaRepository.findById(tutorId).orElse(null);
+		PersonaEntity tutor = personaConverter.convert(tutorDto);
 		List<PracticaDTO> listaDto = new ArrayList<>();
 
 		if (tutor != null) {
@@ -50,55 +54,89 @@ public class PracticaService {
 
 	}
 
-	public boolean existsByTutorAndAlumno(Long idTutor, Long idAlumno) {
-		
-		
+	public boolean existsByTutorAndAlumno(PersonaDTO tutorDto, PersonaDTO alumnoDto) {
+
 		PersonaEntity tutor = null;
-		
-		//SI existe el tutor
-		if((idTutor != null) && (personaRepository.findById(idTutor) != null)) {
-			tutor = personaRepository.findById(idTutor).orElse(null);
-		}else {
+
+		// SI existe el tutor
+		if (tutorDto != null) {
+			tutor = personaConverter.convert(tutorDto);
+		} else {
 			return false;
 		}
-		
-		
+
 		PersonaEntity alumno = null;
-		
-		//SI eexiste el alumno
-		if((idAlumno != null) && (personaRepository.findById(idAlumno) != null)) {
-		 alumno = personaRepository.findById(idAlumno).orElse(null);
-		}else {
+
+		// SI eexiste el alumno
+		if (alumnoDto != null) {
+			alumno = personaConverter.convert(alumnoDto);
+		} else {
 			return false;
 		}
-		
-		//SI el tutor gestiona la practica del alumno
+
+		// SI el tutor gestiona la practica del alumno
 		return practicaRepository.existsByTutorAndAlumno(tutor, alumno);
 	}
 
 	public PracticaDTO findById(Long id) {
 		PracticaEntity practica = null;
-		
-		//Si el id no es nulo
-		if(id != null ) {
-			
+
+		// Si el id no es nulo
+		if (id != null) {
+
 			practica = practicaRepository.findById(id).orElse(null);
-			
+
 		}
-		
+
 		return practicaConverter.convert(practica);
 	}
 
 	public PracticaDTO findByAlumno(Long alumnoId) {
 		PracticaEntity practica = null;
 		PersonaEntity alumno = personaRepository.findById(alumnoId).orElse(null);
-		
-		//Si el alumno no es nulo
-		if(alumno != null) {
+
+		// Si el alumno no es nulo
+		if (alumno != null) {
 			practica = practicaRepository.findByAlumno(alumno).orElse(null);
 		}
-		
+
 		return practicaConverter.convert(practica);
 	}
-	
+
+	public PracticaDTO save(PracticaDTO practica) {
+
+		//Guardado o actualización en cascada
+		if (practica.getAlumno() != null && practica.getAlumno().getId() == null) {
+			practica.setAlumno(personaService.save(practica.getAlumno()));
+		}
+
+		if (practica.getTutor() != null && practica.getTutor().getId() == null) {
+			practica.setTutor(personaService.save(practica.getTutor()));
+		}
+
+		if (practica.getResponsable() != null && practica.getResponsable().getId() == null) {
+			practica.setResponsable(personaService.save(practica.getResponsable()));
+		}
+
+		if (practica.getCentro() != null && practica.getCentro().getId() == null) {
+			practica.setCentro(organizacionService.save(practica.getCentro()));
+		}
+
+		if (practica.getEmpresa() != null && practica.getEmpresa().getId() == null) {
+			practica.setEmpresa(organizacionService.save(practica.getEmpresa()));
+		}
+
+		PracticaEntity entity = practicaConverter.convert(practica);
+
+		entity = practicaRepository.save(entity);
+
+		return practicaConverter.convert(entity);
+
+	}
+
+	public boolean existsBynumeroSeguridadSocial(String nss) {
+		
+		return practicaRepository.existsBynumeroSeguridadSocial(nss);
+	}
+
 }

@@ -11,8 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import es.asv.sigep.dto.PracticaDTO;
 import es.asv.sigep.dto.RegistroDTO;
@@ -141,11 +144,16 @@ public class RegistrosController {
 	private float calcularTiempoRegistrado(RegistroDTO registro) {
 
 		float ret = 0;
+		long minutos = 0;
 
 		if (registro != null) {
 
-			long minutos = ChronoUnit.MINUTES.between(registro.getHoraInicio(), registro.getHoraFin());
-			ret = minutos / 60f;
+			if (registro.getHoraInicio() != null && registro.getHoraFin() != null) {
+
+				minutos = ChronoUnit.MINUTES.between(registro.getHoraInicio(), registro.getHoraFin());
+				ret = minutos / 60f;
+
+			}
 
 			if (registro.getHoraInicio2() != null && registro.getHoraFin2() != null) {
 
@@ -173,6 +181,8 @@ public class RegistrosController {
 				registro = new RegistroDTO();
 				registro.setFecha(fecha);
 				registro.setRegistrable(true);
+			} else {
+				System.out.println(registro);
 			}
 
 			// Comprobar si la fecha es valida
@@ -188,9 +198,48 @@ public class RegistrosController {
 	}
 
 	private boolean estaEntre(LocalDate inicio, LocalDate fin, LocalDate actual) {
-
 		return (actual.isEqual(inicio) || actual.isAfter(inicio)) && (actual.isEqual(fin) || actual.isBefore(fin));
+	}
 
+	@PostMapping("/guardar")
+	public String guardar(@ModelAttribute("registro") RegistroDTO registro, Model model) {
+
+		// Error si no se pasa un registro
+		if (registro == null)
+			return ControllerUtils.mostarError(0, model);
+
+		if (!registro.isRegistrable()) {
+			// TODO Hacer error de que el registro no se puede guardar
+			return ControllerUtils.mostarError(0, model);
+		}
+
+		if (registro.getHoraInicio() == null) {
+			// TODO Hacer error de que el registro no se puede guardar sin al menos la hora
+			// de entrada
+			return ControllerUtils.mostarError(0, model);
+
+		}
+
+		if (registro.getHoraInicio().isAfter(registro.getHoraFin())
+				|| registro.getHoraInicio2().isAfter(registro.getHoraFin2())) {
+			//TODO Hacer error horas no valida, la de inicio es postarior a la de fin
+			return ControllerUtils.mostarError(0, model);
+		}
+
+		// Ponemos la practica del usuario loqueado
+		PracticaDTO practica = practicaService.findByAlumno(ControllerUtils.obtenerUsuario().getId());
+
+		// Guardamo la practica completa en el registro
+		registro.setPractica(practica);
+
+		// Marcamos el dia como registrado
+		registro.setRegistrado(true);
+
+		// guardamos el registro
+		registroService.save(registro);
+
+		// Todo ha salido bien
+		return inicio(model);
 	}
 
 }

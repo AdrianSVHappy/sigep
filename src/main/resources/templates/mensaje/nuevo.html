@@ -17,37 +17,40 @@
 
 	<!-- Contenido principal -->
 	<div class="container mt-5 flex-grow-1">
-		<h2>Mensajes</h2>
+		<h2>Nuevo Mensaje</h2>
 
-		<!-- Nuevo -->
-		<div class="text-right mb-3">
-			<a th:href="@{'/mensaje/nuevo'}" class="btn btn-sm btn-outline-primary">Nuevo mensaje</a>
-		</div>
-		
-		<div class="list-group">
-			<div th:each="mensaje : ${listaMensajes}"
-				th:classappend="${mensaje.autor.id} == ${persona.id} ? 'bg-light border-primary' : ''"
-				class="list-group-item list-group-item-action mb-3 border rounded shadow-sm">
-
-				<!-- Cabecera -->
-				<div class="d-flex justify-content-between">
-					<h5 th:text="${mensaje.asunto}" class="mb-1"></h5>
-					<small th:text="${#temporals.format(mensaje.fecha, 'dd/MM/yyyy HH:mm')}"></small>
-				</div>
-
-				<!-- Información del autor y receptor -->
-				<p class="mb-1">
-					<strong>De:</strong>
-					<span th:text="${mensaje.autor.nombre} + ' ' + (${mensaje.autor.apellidos} ?: '')"></span>
-					<br /><strong>Para:</strong>
-					<span th:text="${mensaje.receptor.nombre} + ' ' + (${mensaje.receptor.apellidos} ?: '')"></span>
-				</p>
-
-				<!-- Mensaje -->
-				<p th:text="${mensaje.texto}" class="mb-2"></p>
-
+		<form th:object="${mensaje}" th:action="@{/mensaje/enviar}" method="post">
+			<!-- Receptor -->
+			<div class="form-group" th:if="${persona.rol == T(es.asv.sigep.enums.RolEnum).P}">
+				<label for="receptor">Receptor</label>
+				<select class="form-control" id="receptor" th:field="*{receptor.id}" >
+					<option value=-1  selected>Todos</option>
+					<option th:each="persona : ${receptores}" th:value="${persona.id}"
+						th:text="${persona.nombre + ' ' + persona.apellidos}">
+					</option>
+				</select>
 			</div>
-		</div>
+
+
+			<!-- Asunto -->
+			<div class="form-group">
+				<label for="asunto">Asunto</label>
+				<input type="text" class="form-control" id="asunto" th:field="*{asunto}"
+					placeholder="Introduce el asunto">
+			</div>
+
+			<!-- Texto -->
+			<div class="form-group">
+				<label for="texto">Texto</label>
+				<textarea class="form-control" id="texto" rows="5" th:field="*{texto}"
+					placeholder="Escribe tu mensaje"></textarea>
+			</div>
+
+			<div class="d-flex justify-content-between mt-3">
+				<a th:href="@{/mensaje/mensajes}" class="btn btn-secondary">Volver</a>
+			  <button type="submit" class="btn btn-primary">Enviar</button>
+			</div>
+		</form>
 	</div>
 
 	<!-- Footer -->

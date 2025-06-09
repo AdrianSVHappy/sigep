@@ -16,7 +16,7 @@
 
 	<!-- Contenedor principal -->
 	<div class="container mt-5 flex-grow-1">
-		<h2>Detalle del Alumno</h2>
+		<h2>Detalles personales</h2>
 
 		<div class="card mt-4">
 			<div class="card-body">
@@ -37,10 +37,12 @@
 				</p>
 				<p><strong>Ubicación:</strong> <span th:text="${alumno.ubicacion?.ciudad}"></span></p>
 
-				<a th:href="@{/alumno/alumnos}" class="btn btn-secondary mt-3"
-					th:if="${persona.rol == T(es.asv.sigep.enums.RolEnum).P}">Volver</a>
-				<a th:href="@{/}" class="btn btn-secondary mt-3"
-					th:if="${persona.rol == T(es.asv.sigep.enums.RolEnum).E}">Volver</a>
+				<div class="d-flex justify-content-between mt-3">
+					<a th:href="@{/persona/alumnos}" class="btn btn-secondary mt-3"
+						th:if="${persona.rol == T(es.asv.sigep.enums.RolEnum).P and persona.id != alumno.id}">Volver</a>
+					<a th:href="@{/persona/form}" class="btn btn-primary mt-3"
+						th:if="${persona.id == alumno.id}">Editar</a>
+				</div>
 			</div>
 		</div>
 	</div>

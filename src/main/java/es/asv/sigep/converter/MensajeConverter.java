@@ -1,6 +1,7 @@
 package es.asv.sigep.converter;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import es.asv.sigep.dto.MensajeDTO;
@@ -8,11 +9,13 @@ import es.asv.sigep.dto.PersonaDTO;
 import es.asv.sigep.dto.RegistroDTO;
 import es.asv.sigep.entities.MensajeEntity;
 import es.asv.sigep.entities.PersonaEntity;
-import es.asv.sigep.entities.PracticaEntity;
-import es.asv.sigep.entities.RegistroEntity;
+
 
 @Component
 public class MensajeConverter {
+
+	@Autowired
+	private PersonaConverter personaConverter;
 
 	/**
 	 * MensajeEntity -> MensajeDTO
@@ -29,14 +32,12 @@ public class MensajeConverter {
 			BeanUtils.copyProperties(entity, dto);
 
 			if (entity.getAutor() != null) {
-				PersonaDTO autor = new PersonaDTO();
-				BeanUtils.copyProperties(entity.getAutor(), autor);
+				PersonaDTO autor = personaConverter.convert(entity.getAutor());
 				dto.setAutor(autor);
 			}
 
 			if (entity.getReceptor() != null) {
-				PersonaDTO receptor = new PersonaDTO();
-				BeanUtils.copyProperties(entity.getReceptor(), receptor);
+				PersonaDTO receptor = personaConverter.convert(entity.getReceptor());
 				dto.setReceptor(receptor);
 			}
 		}
@@ -47,6 +48,7 @@ public class MensajeConverter {
 
 	/**
 	 * MensajeDTO -> MensajeEntity
+	 * 
 	 * @param dto MensajeDTO
 	 * @return MensajeEntity
 	 */
@@ -56,17 +58,15 @@ public class MensajeConverter {
 
 		if (dto != null) {
 			entity = new MensajeEntity();
-			BeanUtils.copyProperties(entity, dto);
+			BeanUtils.copyProperties(dto, entity);
 
 			if (dto.getAutor() != null) {
-				PersonaEntity autor = new PersonaEntity();
-				BeanUtils.copyProperties(autor, dto.getAutor());
+				PersonaEntity autor = personaConverter.convert(dto.getAutor());
 				entity.setAutor(autor);
 			}
 
 			if (dto.getReceptor() != null) {
-				PersonaEntity receptor = new PersonaEntity();
-				BeanUtils.copyProperties(receptor, dto.getReceptor());
+				PersonaEntity receptor = personaConverter.convert(dto.getReceptor());
 				entity.setReceptor(receptor);
 			}
 		}

@@ -17,4 +17,6 @@ public interface PracticaRepository extends JpaRepository<PracticaEntity, Long>{
 	boolean existsByTutorAndAlumno(PersonaEntity tutor, PersonaEntity alumno);
 
 	Optional<PracticaEntity> findByAlumno(PersonaEntity alumno);
+
+	boolean existsBynumeroSeguridadSocial(String nss);
 }

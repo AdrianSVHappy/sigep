@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 
 import es.asv.sigep.SigepApplication;
 import es.asv.sigep.converter.MensajeConverter;
+import es.asv.sigep.converter.PersonaConverter;
 import es.asv.sigep.dto.MensajeDTO;
+import es.asv.sigep.dto.PersonaDTO;
 import es.asv.sigep.entities.MensajeEntity;
 import es.asv.sigep.entities.PersonaEntity;
 import es.asv.sigep.repository.MensajeRepository;
@@ -33,11 +35,14 @@ public class MensajeService {
 	@Autowired
 	private MensajeConverter mensajeConverter;
 	
+	@Autowired
+	private PersonaConverter personaConverter;
 	
 	
-	public List<MensajeDTO> findAllByAutorOrReceptorOrderByFechaDesc(Long persona){
+	
+	public List<MensajeDTO> findAllByAutorOrReceptorOrderByFechaDesc(PersonaDTO persona){
 		
-		PersonaEntity personaEntity = personaRepository.findById(persona).orElse(null);
+		PersonaEntity personaEntity = personaConverter.convert(persona);
 		List<MensajeDTO> listadoDto = new ArrayList<MensajeDTO>();
 	
 		if(personaEntity != null) {
@@ -50,6 +55,22 @@ public class MensajeService {
 		}
 		
 		return listadoDto;
+	}
+
+
+
+	public MensajeDTO save(MensajeDTO mensaje) {
+		
+		MensajeDTO ret = null;
+		
+		if (mensaje != null) {
+			MensajeEntity entity = mensajeConverter.convert(mensaje);
+			
+			entity = mensajeRepository.save(entity);
+			ret = mensajeConverter.convert(entity);
+		}
+		
+		return ret;
 	}
 	
 }

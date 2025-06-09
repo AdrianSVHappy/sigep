@@ -2,6 +2,7 @@ package es.asv.sigep.entities;
 
 import es.asv.sigep.converter.enums.RolEnumConvert;
 import es.asv.sigep.enums.RolEnum;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -39,7 +40,7 @@ public class PersonaEntity {
 	@Column(name = "APELLIDOS", length = 100)
 	private String apellidos;
 
-	@JoinColumn(name = "ORGANIZACION", referencedColumnName = "ID", nullable = false)
+	@JoinColumn(name = "ORGANIZACION", referencedColumnName = "ID")
 	@ManyToOne(fetch = FetchType.LAZY)
 	private OrganizacionEntity organizacion;
 

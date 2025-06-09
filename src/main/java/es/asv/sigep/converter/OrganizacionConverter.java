@@ -47,11 +47,11 @@ public class OrganizacionConverter {
 		OrganizacionEntity entity = null;
 		if (dto != null) {
 			entity = new OrganizacionEntity();
-			BeanUtils.copyProperties(entity, dto);
+			BeanUtils.copyProperties(dto, entity);
 
 			if (dto.getUbicacion() != null) {
 				UbicacionEntity ubi = new UbicacionEntity();
-				BeanUtils.copyProperties(ubi, dto.getUbicacion());
+				BeanUtils.copyProperties(dto.getUbicacion(), ubi);
 				entity.setUbicacion(ubi);
 			}
 

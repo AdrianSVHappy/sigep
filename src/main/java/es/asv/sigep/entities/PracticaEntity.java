@@ -1,10 +1,10 @@
 package es.asv.sigep.entities;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -62,9 +62,9 @@ public class PracticaEntity {
 	private LocalDate inicio;
 
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	@Column(name = "FIN")
+	@Column(name = "FIN", nullable = false)
 	private LocalDate fin;
 
-	@Column(name = "SEGURIDADSOCIAL" , unique = true, nullable = false, length = 12)
+	@Column(name = "SEGURIDADSOCIAL", length = 12)
 	private String numeroSeguridadSocial;
 }

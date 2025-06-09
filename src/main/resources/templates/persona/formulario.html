@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>SIGEP</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+</head>
+
+<body class="d-flex flex-column" style="min-height: 100vh;">
+	<!-- Navbar -->
+	<header th:insert="~{fragments/menu.html :: menu-profe}" th:if="${persona.rol == T(es.asv.sigep.enums.RolEnum).P}">
+	</header>
+	<header th:insert="~{fragments/menuAlumno.html :: menu-alumno}"
+		th:if="${persona.rol == T(es.asv.sigep.enums.RolEnum).E}"></header>
+
+	<!-- Contenedor principal -->
+	<div class="container mt-5 flex-grow-1">
+		<h2 th:text="${personaForm.id} == null ? 'Nueva persona' : 'Editar datos personales'"></h2>
+		<form th:action="@{/persona/guardar}" method="post" th:object="${personaForm}">
+
+			<div class="mb-5 border rounded p-4 shadow-sm">
+
+				<div class="mb-3">
+					<label for="nombre" class="form-label">Nombre</label>
+					<input type="text" th:field="*{nombre}" class="form-control" id="nombre" required />
+				</div>
+
+				<div class="mb-3">
+					<label for="apellidos" class="form-label">Apellidos</label>
+					<input type="text" th:field="*{apellidos}" class="form-control" id="apellidos" required />
+				</div>
+
+				<div class="mb-3">
+					<label for="email" class="form-label">Email</label>
+					<input type="email" th:field="*{email}" class="form-control" id="email" required />
+				</div>
+
+				<div class="mb-3">
+					<label for="telefono" class="form-label">Teléfono</label>
+					<input type="text" th:field="*{telefono}" class="form-control" id="telefono" />
+				</div>
+				
+				<!-- Campos ocultos -->
+				<input type="hidden" th:field="*{id}" />
+				<input type="hidden" th:field="*{rol}" />
+				<input type="hidden" th:field="*{imagenPerfil}" />
+			</div>
+
+			
+
+			<!-- Organizacion -->
+			<div class="mb-5 border rounded p-4 shadow-sm">
+
+				<div class="mb-3">
+					<label for="organizacion" class="form-label">Organización</label>
+					<select th:field="*{organizacion.id}" class="form-select" id="organizacion" required>
+						<option value="" disabled selected>Seleccione una organización</option>
+						<option th:each="org : ${organizaciones}" th:value="${org.id}" th:text="${org.nombre}">
+						</option>
+					</select>
+				</div>
+
+			</div>
+
+
+			<!-- Ubicacion -->
+			<div class="mb-5 border rounded p-4 shadow-sm">
+
+				
+				<input type="hidden" th:field="*{ubicacion.id}" />
+				
+				<div class="mb-3">
+					<label for="pais" class="form-label">País</label>
+					<input type="text" th:field="*{ubicacion.pais}" class="form-control" id="pais" required />
+				</div>
+
+				<div class="mb-3">
+					<label for="comunidad" class="form-label">Comunidad</label>
+					<input type="text" th:field="*{ubicacion.comunidad}" class="form-control" id="comunidad" required />
+				</div>
+
+				<div class="mb-3">
+					<label for="provincia" class="form-label">Provincia</label>
+					<input type="text" th:field="*{ubicacion.provincia}" class="form-control" id="provincia" required />
+				</div>
+
+				<div class="mb-3">
+					<label for="ciudad" class="form-label">Ciudad</label>
+					<input type="text" th:field="*{ubicacion.ciudad}" class="form-control" id="ciudad" required />
+				</div>
+
+				<div class="mb-3">
+					<label for="codigoPostal" class="form-label">Código Postal</label>
+					<input type="text" th:field="*{ubicacion.codigoPostal}" class="form-control" id="codigoPostal"
+						required />
+				</div>
+
+				<div class="mb-3">
+					<label for="direccion" class="form-label">Dirección</label>
+					<input type="text" th:field="*{ubicacion.direccion}" class="form-control" id="direccion" required />
+				</div>
+
+			</div>
+
+			<div class="d-flex justify-content-between">
+				<a th:href="@{/persona/detalle/{id}(id=${persona.id})}" class="btn btn-secondary"
+					th:if="*{id != null}">Volver</a>
+
+				<button type="submit" class="btn btn-primary">Guardar</button>
+			</div>
+		</form>
+
+
+	</div>
+
+
+	<!-- Footer -->
+	<footer th:insert="~{fragments/footer.html :: footer}" class="bg-dark text-white py-4 mt-5"
+		th:if="${persona.rol == T(es.asv.sigep.enums.RolEnum).P}"></footer>
+	<footer th:insert="~{fragments/footerAlumno.html :: footer-alumno}" class="bg-dark text-white py-4 mt-5"
+		th:if="${persona.rol == T(es.asv.sigep.enums.RolEnum).E}"></footer>
+
+
+	<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	<!-- Popper.js -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<!-- Bootstrap JS -->
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

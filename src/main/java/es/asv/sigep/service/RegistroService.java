@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import es.asv.sigep.SigepApplication;
-import es.asv.sigep.controller.AlumnosController;
+import es.asv.sigep.controller.PersonaController;
 import es.asv.sigep.converter.PracticaConverter;
 import es.asv.sigep.converter.RegistroConverter;
 import es.asv.sigep.dto.PracticaDTO;
@@ -81,5 +81,22 @@ public class RegistroService {
 		
 		return dto;
 		
+	}
+
+	public RegistroDTO save(RegistroDTO registro) {
+		
+		RegistroDTO ret = null;
+		
+		if(registro != null) {
+			
+			RegistroEntity entity = registroConverter.convert(registro);
+			
+			if(entity.getPractica() != null) {
+				entity = registroRepository.save(registroConverter.convert(registro));
+				
+				ret = registroConverter.convert(entity);
+			}
+		}
+		return ret;
 	}
 }

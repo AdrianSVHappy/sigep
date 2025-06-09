@@ -8,7 +8,10 @@
 		<div class="collapse navbar-collapse" id="navbarNav">
 			<ul class="navbar-nav ms-auto">
 				<li class="nav-item">
-					<a class="nav-link" th:href="@{/alumno/alumnos}">Lista Alumnos</a>
+					<a class="nav-link" th:href="@{/persona/detalle/{id}(id=${persona.id})}">Info Profesor</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" th:href="@{/persona/alumnos}">Lista Alumnos</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" th:href="@{/practica/practicas}">Datos Prácticas</a>

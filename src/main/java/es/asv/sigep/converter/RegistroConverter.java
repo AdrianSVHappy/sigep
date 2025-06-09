@@ -1,6 +1,7 @@
 package es.asv.sigep.converter;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import es.asv.sigep.dto.PracticaDTO;
@@ -10,6 +11,9 @@ import es.asv.sigep.entities.RegistroEntity;
 
 @Component
 public class RegistroConverter {
+
+	@Autowired
+	private PracticaConverter practicaConverter;
 
 	/**
 	 * RegistroEntity -> RegistroDTO
@@ -26,8 +30,7 @@ public class RegistroConverter {
 			BeanUtils.copyProperties(entity, dto);
 
 			if (entity.getPractica() != null) {
-				PracticaDTO pra = new PracticaDTO();
-				BeanUtils.copyProperties(entity.getPractica(), pra);
+				PracticaDTO pra = practicaConverter.convert(entity.getPractica());
 				dto.setPractica(pra);
 			}
 		}
@@ -37,6 +40,7 @@ public class RegistroConverter {
 
 	/**
 	 * RegistroDTO -> RegistroEntity
+	 * 
 	 * @param dto RegistroDTO
 	 * @return RegistroEntity
 	 */
@@ -46,11 +50,10 @@ public class RegistroConverter {
 
 		if (dto != null) {
 			entity = new RegistroEntity();
-			BeanUtils.copyProperties(entity, dto);
+			BeanUtils.copyProperties(dto, entity);
 
 			if (dto.getPractica() != null) {
-				PracticaEntity pra = new PracticaEntity();
-				BeanUtils.copyProperties(pra, dto.getPractica());
+				PracticaEntity pra = practicaConverter.convert(dto.getPractica());
 				entity.setPractica(pra);
 			}
 		}

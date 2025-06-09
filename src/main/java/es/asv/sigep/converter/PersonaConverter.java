@@ -1,6 +1,7 @@
 package es.asv.sigep.converter;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import es.asv.sigep.dto.OrganizacionDTO;
@@ -12,6 +13,9 @@ import es.asv.sigep.entities.UbicacionEntity;
 
 @Component
 public class PersonaConverter {
+
+	@Autowired
+	private OrganizacionConverter organizacionConverter;
 
 	/**
 	 * PersonaEntity -> PersonaDTO
@@ -27,8 +31,9 @@ public class PersonaConverter {
 			BeanUtils.copyProperties(entity, dto);
 
 			if (entity.getOrganizacion() != null) {
-				OrganizacionDTO org = new OrganizacionDTO();
+				OrganizacionDTO org = organizacionConverter.convert(entity.getOrganizacion());
 				BeanUtils.copyProperties(entity.getOrganizacion(), org);
+
 				dto.setOrganizacion(org);
 			}
 
@@ -54,17 +59,17 @@ public class PersonaConverter {
 		PersonaEntity entity = null;
 		if (dto != null) {
 			entity = new PersonaEntity();
-			BeanUtils.copyProperties(entity, dto);
+			BeanUtils.copyProperties(dto, entity);
 
 			if (dto.getOrganizacion() != null) {
-				OrganizacionEntity org = new OrganizacionEntity();
-				BeanUtils.copyProperties(org, dto.getOrganizacion());
+				OrganizacionEntity org = organizacionConverter.convert(dto.getOrganizacion());
+
 				entity.setOrganizacion(org);
 			}
 
 			if (dto.getUbicacion() != null) {
 				UbicacionEntity ubi = new UbicacionEntity();
-				BeanUtils.copyProperties(ubi, dto.getUbicacion());
+				BeanUtils.copyProperties(dto.getUbicacion(), ubi);
 				entity.setUbicacion(ubi);
 			}
 

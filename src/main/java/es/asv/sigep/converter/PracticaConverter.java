@@ -1,6 +1,7 @@
 package es.asv.sigep.converter;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import es.asv.sigep.dto.OrganizacionDTO;
@@ -12,6 +13,12 @@ import es.asv.sigep.entities.PracticaEntity;
 
 @Component
 public class PracticaConverter {
+
+	@Autowired
+	private PersonaConverter personaConverter;
+
+	@Autowired
+	private OrganizacionConverter organizacionConverter;
 
 	/**
 	 * PracticaEntity -> PracticaDTO
@@ -27,32 +34,27 @@ public class PracticaConverter {
 			BeanUtils.copyProperties(entity, dto);
 
 			if (entity.getAlumno() != null) {
-				PersonaDTO alu = new PersonaDTO();
-				BeanUtils.copyProperties(entity.getAlumno(), alu);
+				PersonaDTO alu = personaConverter.convert(entity.getAlumno());
 				dto.setAlumno(alu);
 			}
 
 			if (entity.getTutor() != null) {
-				PersonaDTO tut = new PersonaDTO();
-				BeanUtils.copyProperties(entity.getTutor(), tut);
+				PersonaDTO tut = personaConverter.convert(entity.getTutor());
 				dto.setTutor(tut);
 			}
 
 			if (entity.getResponsable() != null) {
-				PersonaDTO res = new PersonaDTO();
-				BeanUtils.copyProperties(entity.getResponsable(), res);
+				PersonaDTO res = personaConverter.convert(entity.getResponsable());
 				dto.setResponsable(res);
 			}
 
 			if (entity.getCentro() != null) {
-				OrganizacionDTO cen = new OrganizacionDTO();
-				BeanUtils.copyProperties(entity.getCentro(), cen);
+				OrganizacionDTO cen = organizacionConverter.convert(entity.getCentro());
 				dto.setCentro(cen);
 			}
 
 			if (entity.getEmpresa() != null) {
-				OrganizacionDTO emp = new OrganizacionDTO();
-				BeanUtils.copyProperties(entity.getEmpresa(), emp);
+				OrganizacionDTO emp = organizacionConverter.convert(entity.getEmpresa());
 				dto.setEmpresa(emp);
 			}
 
@@ -72,37 +74,33 @@ public class PracticaConverter {
 		PracticaEntity entity = null;
 		if (dto != null) {
 			entity = new PracticaEntity();
-			BeanUtils.copyProperties(entity, dto);
+			BeanUtils.copyProperties(dto, entity);
 
 			if (dto.getAlumno() != null) {
-				PersonaEntity alu = new PersonaEntity();
-				BeanUtils.copyProperties(alu, dto.getAlumno());
+				PersonaEntity alu = personaConverter.convert(dto.getAlumno());
 				entity.setAlumno(alu);
 			}
 
 			if (dto.getTutor() != null) {
-				PersonaEntity tut = new PersonaEntity();
-				BeanUtils.copyProperties(tut, dto.getTutor());
+				PersonaEntity tut = personaConverter.convert(dto.getTutor());
 				entity.setTutor(tut);
 			}
 
 			if (dto.getResponsable() != null) {
-				PersonaEntity res = new PersonaEntity();
-				BeanUtils.copyProperties(res, dto.getResponsable());
+				PersonaEntity res = personaConverter.convert(dto.getResponsable());
 				entity.setResponsable(res);
 			}
 
 			if (dto.getCentro() != null) {
-				OrganizacionEntity cen = new OrganizacionEntity();
-				BeanUtils.copyProperties(cen, dto.getCentro());
+				OrganizacionEntity cen = organizacionConverter.convert(dto.getCentro());
 				entity.setCentro(cen);
 			}
 
 			if (dto.getEmpresa() != null) {
-				OrganizacionEntity emp = new OrganizacionEntity();
-				BeanUtils.copyProperties(emp, dto.getEmpresa());
+				OrganizacionEntity emp = organizacionConverter.convert(dto.getEmpresa());
 				entity.setEmpresa(emp);
 			}
+
 		}
 
 		return entity;

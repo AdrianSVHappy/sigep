@@ -44,7 +44,7 @@ public class HomeController {
 	public String cambiar(Model model) {
 		
 		if(1L == ControllerUtils.obtenerUsuario().getId())
-			ControllerUtils.iniciarUsuario(3L, personaService);
+			ControllerUtils.iniciarUsuario(13L, personaService);
 		else
 			ControllerUtils.iniciarUsuario(1L, personaService);
 			

@@ -18,7 +18,7 @@
 		<h2 th:text="'Formulario de Registro - ' + ${registro.dia} + '/' + ${	registro.mes} + '/' + ${registro.anio}">
 		</h2>
 
-		<form th:if="${registro.registrable}" th:action="@{/registro}" method="post">
+		<form th:if="${registro.registrable}" th:action="@{/registro/guardar}" method="post" th:object="${registro}">
 			<!-- Horas -->
 			<div class="row mb-3">
 				<div class="col">
@@ -54,7 +54,16 @@
 					th:readonly="${!registro.registrable}"></textarea>
 			</div>
 
-
+			<!-- Campos ocultos -->
+			<input type="hidden" th:field="${registro.id}" />
+			<input type="hidden" th:field="${registro.registrable}" />
+			<input type="hidden" th:field="${registro.registrado}" />
+			<input type="hidden" th:field="${registro.fecha}" />
+			<input type="hidden" th:field="${registro.dia}" />
+			<input type="hidden" th:field="${registro.mes}" />
+			<input type="hidden" th:field="${registro.anio}" />
+			
+			
 			<div class="d-flex justify-content-between">
 				<a th:href="@{/registro/calendario}" class="btn btn-secondary">Volver</a>
 

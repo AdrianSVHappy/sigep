@@ -37,7 +37,7 @@ public class UbicacionConverter {
 		UbicacionEntity entity = null;
 		if (dto != null) {
 			entity = new UbicacionEntity();
-			BeanUtils.copyProperties(entity, dto);
+			BeanUtils.copyProperties(dto, entity);
 		}
 
 		return entity;

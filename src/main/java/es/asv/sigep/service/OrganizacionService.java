@@ -49,6 +49,10 @@ public class OrganizacionService {
 
 	public OrganizacionDTO findById(Long id) {
 		
+		if (id == null) {
+			return null;
+		}
+		
 		OrganizacionEntity entity = organizacionRepository.findById(id).orElse(null);
 		
 		return organizacionConverter.convert(entity);

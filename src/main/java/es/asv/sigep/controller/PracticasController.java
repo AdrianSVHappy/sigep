@@ -104,6 +104,39 @@ public class PracticasController {
 		return "practica/nueva";
 	}
 
+	/**
+	 * Mostrar la pantalla de edición de datos de la practica seleccionada
+	 * 
+	 * @param practica
+	 * @param model
+	 * @return vista
+	 */
+	private String mostrarFormulario(PracticaDTO practica, Model model, String tipo) {
+
+		ControllerUtils.modelFooter(model);
+		ControllerUtils.modelPersona(model);
+
+		model.addAttribute("practicaForm", practica);
+
+		if ("D".equals(tipo))
+			return "practica/editar";
+
+		if ("E".equals(tipo)) {
+
+			// Lista de responsables
+			List<PersonaDTO> listaResponsables = personaService.findAllByRol(RolEnum.R);
+			model.addAttribute("listaResponsables", listaResponsables);
+
+			// Lista de empresas
+			List<OrganizacionDTO> listaEmpresas = organizacionService.findAllByTipo(TipoEnum.E);
+			model.addAttribute("listaEmpresas", listaEmpresas);
+
+			return "practica/editarEmpresa";
+		}
+
+		return mostarDetalle(practica, model);
+	}
+
 	@GetMapping("/practicas")
 	public String inicio(Model model) {
 
@@ -184,25 +217,16 @@ public class PracticasController {
 			return ControllerUtils.mostarError(0, model);
 		}
 
-		// Comrobar si hay datos obligatorios nulos
-		if (practicaForm == null || practicaForm.getDuracion() < 0 || practicaForm.getInicio() == null
-				|| practicaForm.getFin() == null) {
-			// TODO Mostrar error campos obligatorios vacios
-			return ControllerUtils.mostarError(0, model);
-		}
+		String errorCampos = comprobarCampos(practicaForm, model);
+		if (errorCampos != null)
+			return errorCampos;
 
-		// Comprobar que la fecha de inicio y fin son correctas
-		if (practicaForm.getFin().isBefore(practicaForm.getInicio())) {
-			// TODO Mostrar error la fecha de inicio es postarior a la de fin
-			return ControllerUtils.mostarError(0, model);
-		}
-
-		//Comprobar si el numero de la seguridad social está duplicado
-		if(practicaService.existsBynumeroSeguridadSocial(practicaForm.getNumeroSeguridadSocial())) {
+		// Comprobar si el numero de la seguridad social está duplicado
+		if (practicaService.existsBynumeroSeguridadSocial(practicaForm.getNumeroSeguridadSocial())) {
 			// TODO Mostrar error el numero de la seguridad social ya está registrado
 			return ControllerUtils.mostarError(0, model);
 		}
-		
+
 		// Establecer responsable predefinido
 		if (practicaForm.getResponsable().getId() != null) {
 
@@ -232,7 +256,7 @@ public class PracticasController {
 			practicaForm.getResponsable().setUbicacion(empresaDB.getUbicacion());
 
 		}
-			
+
 		// Establecer datos constantes
 		practicaForm.setTutor(ControllerUtils.obtenerUsuario());
 		practicaForm.setCentro(ControllerUtils.obtenerUsuario().getOrganizacion());
@@ -251,10 +275,163 @@ public class PracticasController {
 			practicaForm.getResponsable().setUbicacion(practicaForm.getEmpresa().getUbicacion());
 		}
 
-		// personaService.save(practicaForm.getAlumno());
 		practicaService.save(practicaForm);
 
 		return mostrarTabla(model);
 	}
 
+	@GetMapping("/form/{id}/{tipo}")
+	public String form(@PathVariable("id") Long id, @PathVariable("tipo") String tipo, Model model) {
+
+		if (id == null) {
+			// TODO Error id de la practica no valida
+			return ControllerUtils.mostarError(0, model);
+		}
+
+		if (!"D".equals(tipo) && !"E".equals(tipo)) {
+			// TODO tipo de formulario no valido
+			return ControllerUtils.mostarError(0, model);
+		}
+
+		PracticaDTO form = practicaService.findById(id);
+
+		if (form == null) {
+			// TODO Error practica no encontrada en la base de datos
+			return ControllerUtils.mostarError(0, model);
+		}
+
+		return mostrarFormulario(form, model, tipo);
+
+	}
+
+	private String comprobarCampos(PracticaDTO practica, Model model) {
+
+		// Comrobar si hay datos obligatorios nulos
+		if (practica == null || practica.getDuracion() < 0 || practica.getInicio() == null
+				|| practica.getFin() == null) {
+			// TODO Mostrar error campos obligatorios vacios
+			return ControllerUtils.mostarError(0, model);
+		}
+
+		// Comprobar que la fecha de inicio y fin son correctas
+		if (practica.getFin().isBefore(practica.getInicio())) {
+			// TODO Mostrar error la fecha de inicio es postarior a la de fin
+			return ControllerUtils.mostarError(0, model);
+		}
+
+		return null;
+	}
+
+	@PostMapping("/editarDatos")
+	public String editarDatos(@ModelAttribute("practicaForm") PracticaDTO practicaForm, Model model) {
+
+		if (practicaForm.getId() == null) {
+			// TODO Error id de la practica no valida
+			return ControllerUtils.mostarError(0, model);
+		}
+
+		if (ControllerUtils.obtenerUsuario().getRol() != RolEnum.P) {
+			// TODO Error el usuario no tiene permiso para modificar una practica
+			return ControllerUtils.mostarError(0, model);
+		}
+
+		PracticaDTO practicaDB = practicaService.findById(practicaForm.getId());
+
+		if (practicaDB == null) {
+			// TODO Error la practica no existe en la base de datos
+			return ControllerUtils.mostarError(0, model);
+		}
+
+		// Comprobar que campos se ha modificado
+		if (practicaForm.getDuracion() > 0 && practicaDB.getDuracion() != practicaForm.getDuracion())
+			practicaDB.setDuracion(practicaForm.getDuracion());
+
+		if (practicaForm.getInicio() != null && !practicaForm.getInicio().equals(practicaDB.getInicio()))
+			practicaDB.setInicio(practicaForm.getInicio());
+
+		if (practicaForm.getFin() != null && !practicaForm.getFin().equals(practicaDB.getFin()))
+			practicaDB.setFin(practicaForm.getFin());
+
+		if (!practicaForm.getNumeroSeguridadSocial().equals(practicaDB.getNumeroSeguridadSocial()) && !practicaService
+				.existsByNumeroSeguridadSocialAndIdNot(practicaForm.getNumeroSeguridadSocial(), practicaForm.getId())) {
+			practicaDB.setNumeroSeguridadSocial(practicaForm.getNumeroSeguridadSocial());
+		}
+
+		String errorCampos = comprobarCampos(practicaDB, model);
+		if (errorCampos != null)
+			return null;
+
+		practicaService.save(practicaDB);
+
+		return mostrarTabla(model);
+	}
+
+	@PostMapping("/editarEmpresa")
+	public String editarEmpresa(@ModelAttribute("practicaForm") PracticaDTO practicaForm, Model model) {
+
+		PracticaDTO practicaDB = practicaService.findById(practicaForm.getId());
+
+		if (practicaDB == null) {
+			// TODO mostrar error practica no encontrada en la base de datos
+			ControllerUtils.mostarError(0, model);
+		}
+
+		// Datos que nunca cambian
+		practicaForm.setAlumno(practicaDB.getAlumno());
+		practicaForm.setTutor(practicaDB.getTutor());
+		practicaForm.setCentro(practicaDB.getCentro());
+		practicaForm.getResponsable().setRol(RolEnum.R);
+		practicaForm.getEmpresa().setTipo(TipoEnum.E);
+
+		// No cambia el responsable
+		if (practicaForm.getResponsable().getId() == practicaDB.getResponsable().getId()) {
+
+			practicaForm.getResponsable().setId((practicaDB.getResponsable().getId()));
+
+			practicaDB.setResponsable(practicaForm.getResponsable());
+
+			// No cambia la empresa
+			if (practicaForm.getEmpresa().getId() == practicaDB.getEmpresa().getId()) {
+
+				practicaForm.getEmpresa().setId(practicaDB.getEmpresa().getId());
+				practicaForm.getResponsable().setOrganizacion(practicaDB.getEmpresa());
+
+				practicaDB.setEmpresa(practicaForm.getEmpresa());
+
+			} else {
+
+				OrganizacionDTO empresa = organizacionService.findById(practicaForm.getEmpresa().getId());
+
+				// Empresa nueva
+				if (empresa == null) {
+					practicaDB.setEmpresa(practicaForm.getEmpresa());
+					practicaForm.getResponsable().setOrganizacion(practicaForm.getEmpresa());
+				} else {
+					// Otra empresa en la bbdd
+					practicaDB.setEmpresa(empresa);
+					practicaDB.getResponsable().setOrganizacion(empresa);
+				}
+			}
+
+		} else {
+
+			PersonaDTO respon = personaService.findById(practicaForm.getResponsable().getId());
+
+			// Responsable nuevo
+			if (respon == null) {
+				practicaDB.setResponsable(practicaForm.getResponsable());
+				practicaDB.getResponsable().setOrganizacion(practicaForm.getEmpresa());
+				practicaDB.setEmpresa(practicaForm.getEmpresa());
+			} else {
+				// Otro responsable en la bbdd
+				practicaDB.setResponsable(respon);
+				practicaDB.setEmpresa(respon.getOrganizacion());
+			}
+		}
+
+		practicaService.save(practicaDB);
+
+		return mostarDetalle(practicaDB, model);
+
+	}
 }

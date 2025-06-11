@@ -32,6 +32,10 @@ public class PersonaService {
 
 	public PersonaDTO findById(Long id) {
 
+		if(id == null) {
+			return null;
+		}
+		
 		// Busca a la persona
 		PersonaEntity personaEntity = personaRepository.findById(id).orElse(null);
 

@@ -105,24 +105,39 @@ public class PracticaService {
 
 	public PracticaDTO save(PracticaDTO practica) {
 
-		//Guardado o actualización en cascada
-		if (practica.getAlumno() != null && practica.getAlumno().getId() == null) {
-			practica.setAlumno(personaService.save(practica.getAlumno()));
-		}
-
+		// Guardado o actualización en cascada
 		if (practica.getTutor() != null && practica.getTutor().getId() == null) {
 			practica.setTutor(personaService.save(practica.getTutor()));
 		}
 
-		if (practica.getResponsable() != null && practica.getResponsable().getId() == null) {
+		if (practica.getAlumno() != null && practica.getAlumno().getId() == null) {
+
+			if (practica.getAlumno().getOrganizacion().getId() == null) {
+				practica.getAlumno().setOrganizacion(practica.getTutor().getOrganizacion());
+			}
+
+			practica.setAlumno(personaService.save(practica.getAlumno()));
+		}
+
+		if (practica.getResponsable() != null) {
 			practica.setResponsable(personaService.save(practica.getResponsable()));
 		}
 
-		if (practica.getCentro() != null && practica.getCentro().getId() == null) {
+		if (practica.getCentro() != null) {
+
+			if (practica.getCentro().getId() == null) {
+				practica.setCentro(practica.getTutor().getOrganizacion());
+			}
+
 			practica.setCentro(organizacionService.save(practica.getCentro()));
 		}
 
-		if (practica.getEmpresa() != null && practica.getEmpresa().getId() == null) {
+		if (practica.getEmpresa() != null) {
+
+			if (practica.getEmpresa().getId() == null) {
+				practica.setEmpresa(practica.getResponsable().getOrganizacion());
+			}
+
 			practica.setEmpresa(organizacionService.save(practica.getEmpresa()));
 		}
 
@@ -135,8 +150,14 @@ public class PracticaService {
 	}
 
 	public boolean existsBynumeroSeguridadSocial(String nss) {
-		
+
 		return practicaRepository.existsBynumeroSeguridadSocial(nss);
+	}
+
+	public boolean existsByNumeroSeguridadSocialAndIdNot(String nss, Long id) {
+
+		return practicaRepository.existsByNumeroSeguridadSocialAndIdNot(nss, id);
+
 	}
 
 }

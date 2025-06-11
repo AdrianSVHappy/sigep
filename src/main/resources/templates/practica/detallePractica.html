@@ -41,7 +41,14 @@
 
 		<!-- Datos de la Práctica -->
 		<div class="card mb-4">
-			<div class="card-header bg-secondary text-white">Datos de la Práctica</div>
+
+			<div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+				<span>Datos de la Práctica</span>
+				<a th:href="@{/practica/form/{id}/{tipo}(id=${practica.id}, tipo='D')}"
+					class="btn btn-sm btn-outline-light">Editar</a>
+			</div>
+
+
 			<div class="card-body">
 				<p><strong>Duración:</strong> <span th:text="${practica.duracion + ' horas'}"></span></p>
 				<p><strong>Fecha de Inicio:</strong> <span
@@ -66,23 +73,27 @@
 			</div>
 		</div>
 
-		<!-- Datos del Responsable -->
-		<div class="card mb-4">
-			<div class="card-header bg-secondary text-white">Responsable</div>
-			<div class="card-body">
-				<p><strong>Nombre:</strong> <span
-						th:text="${practica.responsable.nombre + ' ' + practica.responsable.apellidos}"></span></p>
-				<p><strong>Email:</strong> <span th:text="${practica.responsable.email}"></span></p>
-				<p><strong>Teléfono:</strong> <span th:text="${practica.responsable.telefono}"></span></p>
-			</div>
-		</div>
-
 		<!-- Centro Educativo -->
 		<div class="card mb-4">
 			<div class="card-header bg-secondary text-white">Centro Educativo</div>
 			<div class="card-body">
 				<p><strong>Nombre:</strong> <span th:text="${practica.centro.nombre}"></span></p>
 				<p><strong>Ubicación:</strong> <span th:text="${practica.centro.ubicacion?.ciudad}"></span></p>
+			</div>
+		</div>
+
+		<!-- Datos del Responsable -->
+		<div class="card mb-4">
+			<div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+						<span>Responsable</span>
+						<a th:href="@{/practica/form/{id}/{tipo}(id=${practica.id}, tipo='E')}"
+							class="btn btn-sm btn-outline-light">Editar</a>
+					</div>
+			<div class="card-body">
+				<p><strong>Nombre:</strong> <span
+						th:text="${practica.responsable.nombre + ' ' + practica.responsable.apellidos}"></span></p>
+				<p><strong>Email:</strong> <span th:text="${practica.responsable.email}"></span></p>
+				<p><strong>Teléfono:</strong> <span th:text="${practica.responsable.telefono}"></span></p>
 			</div>
 		</div>
 
@@ -102,9 +113,6 @@
 				th:if="${persona.rol == T(es.asv.sigep.enums.RolEnum).P}">Volver</a>
 		</div>
 	</div>
-
-
-
 
 	<!-- Footer -->
 	<footer th:insert="~{fragments/footer.html :: footer}" class="bg-dark text-white py-4 mt-5"

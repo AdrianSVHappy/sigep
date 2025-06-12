@@ -1,1 +1,7 @@
 CREATE DATABASE IF NOT EXISTS sigep;
+
+CREATE USER IF NOT EXISTS 'sigep'@'localhost' IDENTIFIED BY 'sigep';
+
+GRANT ALL PRIVILEGES ON sigep.* TO 'sigep'@'localhost';
+
+FLUSH PRIVILEGES;

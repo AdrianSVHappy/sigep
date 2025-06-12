@@ -73,4 +73,14 @@ public class PersonaService {
 		return dtoList;
 	}
 
+	public PersonaDTO findByEmail(String email) {
+		
+		if(email == null)
+			return null;
+		
+		PersonaEntity entity = personaRepository.findByEmail(email);
+		
+		return personaConverter.convert(entity);
+	}
+
 }

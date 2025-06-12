@@ -10,7 +10,7 @@
 <body class="d-flex flex-column" style="min-height: 100vh;">
 	<!-- Menu -->
 	<header th:insert="~{fragments/menuAlumno.html :: menu-alumno}"
-		th:if="${persona.rol == T(es.asv.sigep.enums.RolEnum).E}"></header>
+		th:if="${persona != null and persona.rol == T(es.asv.sigep.enums.RolEnum).E}"></header>
 
 
 	<!-- Contenido principal -->

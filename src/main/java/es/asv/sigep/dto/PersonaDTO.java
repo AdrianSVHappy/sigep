@@ -16,11 +16,11 @@ public class PersonaDTO {
 	private OrganizacionDTO organizacion;
 
 	private UbicacionDTO ubicacion;
- 
+
 	private String imagenPerfil;
 
 	private RolEnum rol;
- 
+
 	private String email;
 
 	private String telefono;

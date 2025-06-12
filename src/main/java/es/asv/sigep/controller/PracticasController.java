@@ -52,10 +52,10 @@ public class PracticasController {
 	private String mostrarTabla(Model model) {
 
 		ControllerUtils.modelFooter(model);
-		ControllerUtils.modelPersona(model);
+		ControllerUtils.modelPersona(personaService, model);
 
 		// Mostrando lista de practicas
-		List<PracticaDTO> practicas = practicaService.findAllByTutor(ControllerUtils.obtenerUsuario());
+		List<PracticaDTO> practicas = practicaService.findAllByTutor(ControllerUtils.obtenerUsuario(personaService));
 		model.addAttribute("practicas", practicas);
 
 		return "practica/listaPracticas";
@@ -70,7 +70,7 @@ public class PracticasController {
 	private String mostarDetalle(PracticaDTO practica, Model model) {
 
 		ControllerUtils.modelFooter(model);
-		ControllerUtils.modelPersona(model);
+		ControllerUtils.modelPersona(personaService, model);
 
 		model.addAttribute("practica", practica);
 
@@ -88,7 +88,7 @@ public class PracticasController {
 	private String mostrarFormularioNuevo(PracticaDTO practicaBlanca, Model model) {
 
 		ControllerUtils.modelFooter(model);
-		ControllerUtils.modelPersona(model);
+		ControllerUtils.modelPersona(personaService, model);
 
 		// Practica en blanco
 		model.addAttribute("practicaForm", practicaBlanca);
@@ -114,7 +114,7 @@ public class PracticasController {
 	private String mostrarFormulario(PracticaDTO practica, Model model, String tipo) {
 
 		ControllerUtils.modelFooter(model);
-		ControllerUtils.modelPersona(model);
+		ControllerUtils.modelPersona(personaService, model);
 
 		model.addAttribute("practicaForm", practica);
 
@@ -146,16 +146,16 @@ public class PracticasController {
 	@GetMapping("/detalle/{id}")
 	public String detalle(@PathVariable("id") final Long id, final Model model) {
 
-		PersonaDTO aux = ControllerUtils.obtenerUsuario();
+		PersonaDTO aux = ControllerUtils.obtenerUsuario(personaService);
 		PracticaDTO practica = null;
 
 		// Alumno
-		if (ControllerUtils.obtenerUsuario().getRol() == RolEnum.E) {
-			practica = practicaService.findByAlumno(ControllerUtils.obtenerUsuario().getId());
+		if (ControllerUtils.obtenerUsuario(personaService).getRol() == RolEnum.E) {
+			practica = practicaService.findByAlumno(ControllerUtils.obtenerUsuario(personaService).getId());
 		}
 
 		// Profesor
-		if (ControllerUtils.obtenerUsuario().getRol() == RolEnum.P) {
+		if (ControllerUtils.obtenerUsuario(personaService).getRol() == RolEnum.P) {
 			practica = practicaService.findById(id);
 		}
 
@@ -173,21 +173,21 @@ public class PracticasController {
 	@GetMapping("/nueva")
 	public String nuevaPractica(Model model) {
 
-		if (ControllerUtils.obtenerUsuario().getRol() == RolEnum.P) {
+		if (ControllerUtils.obtenerUsuario(personaService).getRol() == RolEnum.P) {
 			PracticaDTO practicaBlanca = new PracticaDTO();
 
 			// Añadimos un alumno en blanco
 			PersonaDTO alumnoBlanco = new PersonaDTO();
 			alumnoBlanco.setRol(RolEnum.E);
 			alumnoBlanco.setUbicacion(new UbicacionDTO());
-			alumnoBlanco.setOrganizacion(ControllerUtils.obtenerUsuario().getOrganizacion());
+			alumnoBlanco.setOrganizacion(ControllerUtils.obtenerUsuario(personaService).getOrganizacion());
 			practicaBlanca.setAlumno(alumnoBlanco);
 
 			// Añadimos tutor
-			practicaBlanca.setTutor(ControllerUtils.obtenerUsuario());
+			practicaBlanca.setTutor(ControllerUtils.obtenerUsuario(personaService));
 
 			// Añadimos Centro
-			practicaBlanca.setCentro(ControllerUtils.obtenerUsuario().getOrganizacion());
+			practicaBlanca.setCentro(ControllerUtils.obtenerUsuario(personaService).getOrganizacion());
 
 			// Añadimos empresa en blanco
 			OrganizacionDTO empresaBlanca = new OrganizacionDTO();
@@ -212,7 +212,7 @@ public class PracticasController {
 	public String guardar(@ModelAttribute("practicaForm") PracticaDTO practicaForm, Model model) {
 
 		// Comprobar que el usuario logueado tiene permiso
-		if (ControllerUtils.obtenerUsuario().getRol() != RolEnum.P) {
+		if (ControllerUtils.obtenerUsuario(personaService).getRol() != RolEnum.P) {
 			// TODO Mostar error de permisos
 			return ControllerUtils.mostarError(0, model);
 		}
@@ -258,11 +258,11 @@ public class PracticasController {
 		}
 
 		// Establecer datos constantes
-		practicaForm.setTutor(ControllerUtils.obtenerUsuario());
-		practicaForm.setCentro(ControllerUtils.obtenerUsuario().getOrganizacion());
+		practicaForm.setTutor(ControllerUtils.obtenerUsuario(personaService));
+		practicaForm.setCentro(ControllerUtils.obtenerUsuario(personaService).getOrganizacion());
 		practicaForm.getAlumno().setNombre(practicaForm.getAlumno().getEmail());
-		practicaForm.getAlumno().setUbicacion(ControllerUtils.obtenerUsuario().getOrganizacion().getUbicacion());
-		practicaForm.getAlumno().setOrganizacion(ControllerUtils.obtenerUsuario().getOrganizacion());
+		practicaForm.getAlumno().setUbicacion(ControllerUtils.obtenerUsuario(personaService).getOrganizacion().getUbicacion());
+		practicaForm.getAlumno().setOrganizacion(ControllerUtils.obtenerUsuario(personaService).getOrganizacion());
 		practicaForm.getAlumno().setRol(RolEnum.E);
 
 		// Guardamos los campos nuevos
@@ -330,7 +330,7 @@ public class PracticasController {
 			return ControllerUtils.mostarError(0, model);
 		}
 
-		if (ControllerUtils.obtenerUsuario().getRol() != RolEnum.P) {
+		if (ControllerUtils.obtenerUsuario(personaService).getRol() != RolEnum.P) {
 			// TODO Error el usuario no tiene permiso para modificar una practica
 			return ControllerUtils.mostarError(0, model);
 		}

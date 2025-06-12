@@ -9,10 +9,12 @@
 
 <body>
 	<!-- Navbar -->
-	<header th:insert="~{fragments/menu.html :: menu-profe}" th:if="${persona.rol == T(es.asv.sigep.enums.RolEnum).P}">
+	<header th:insert="~{fragments/menuBlanco.html :: menu-blanco}" th:if="${persona == null}">
+	</header>
+	<header th:insert="~{fragments/menu.html :: menu-profe}" th:if="${persona != null and persona.rol == T(es.asv.sigep.enums.RolEnum).P}">
 	</header>
 	<header th:insert="~{fragments/menuAlumno.html :: menu-alumno}"
-		th:if="${persona.rol == T(es.asv.sigep.enums.RolEnum).E}"></header>
+		th:if="${persona != null and persona.rol == T(es.asv.sigep.enums.RolEnum).E}"></header>
 
 	</header>
 	<!-- Contenedor principal -->
@@ -87,9 +89,9 @@
 
 	<!-- Footer -->
 	<footer th:insert="~{fragments/footer.html :: footer}" class="bg-dark text-white py-4 mt-5"
-		th:if="${persona.rol == T(es.asv.sigep.enums.RolEnum).P}"></footer>
+		th:if="${persona != null and persona.rol == T(es.asv.sigep.enums.RolEnum).P}"></footer>
 	<footer th:insert="~{fragments/footerAlumno.html :: footer-alumno}" class="bg-dark text-white py-4 mt-5"
-		th:if="${persona.rol == T(es.asv.sigep.enums.RolEnum).E}"></footer>
+		th:if="${persona != null and persona.rol == T(es.asv.sigep.enums.RolEnum).E}"></footer>
 
 
 	<!-- jQuery -->

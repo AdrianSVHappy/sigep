@@ -55,7 +55,7 @@ public class PersonaEntity {
 	@Convert(converter = RolEnumConvert.class)
 	private RolEnum rol;
 
-	@Column(name = "EMAIL", nullable = false)
+	@Column(name = "EMAIL", nullable = false, unique = true)
 	private String email;
 
 	@Column(name = "TELEFONO", length = 14)

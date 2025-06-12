@@ -1,34 +1,23 @@
 package es.asv.sigep.controller;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
 import es.asv.sigep.dto.PersonaDTO;
-import es.asv.sigep.entities.OrganizacionEntity;
-import es.asv.sigep.entities.PersonaEntity;
-import es.asv.sigep.entities.PracticaEntity;
-import es.asv.sigep.entities.UbicacionEntity;
-import es.asv.sigep.enums.TipoEnum;
 import es.asv.sigep.service.PersonaService;
 
+
+@Controller
 public class ControllerUtils {
 
-	private static PersonaDTO usuarioAux;
-
-	public static void iniciarUsuario(Long id, PersonaService personaService) {
-
-		usuarioAux = personaService.findById(id);
+	@Autowired
+	private PersonaService personaService;
 	
-	}
-
-	public static PersonaDTO obtenerUsuario() {
-		return usuarioAux;
-	}
 
 	public static void modelFooter(Model model) {
 
@@ -42,15 +31,7 @@ public class ControllerUtils {
 
 	}
 	
-	
-	public static void modelPersona(Model model) {
 		
-		if(usuarioAux != null) {
-			model.addAttribute("persona", usuarioAux);
-		}
-		
-	}
-	
 	
 	public static String mostarError(int error, Model model) {
 		
@@ -86,6 +67,21 @@ public class ControllerUtils {
 	        meses.add("Diciembre");
 
 	        return meses.get(codMes - 1);
+	}
+
+
+
+	public static void modelPersona(PersonaService ser, Model model) {
+		
+		model.addAttribute("persona", obtenerUsuario(ser));
+	}
+
+
+
+	public static PersonaDTO obtenerUsuario(PersonaService ser) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		
+		 return ser.findByEmail(auth.getName());
 	}
 
 }

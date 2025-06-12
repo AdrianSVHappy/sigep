@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import es.asv.sigep.dto.PracticaDTO;
 import es.asv.sigep.dto.RegistroDTO;
+import es.asv.sigep.service.PersonaService;
 import es.asv.sigep.service.PracticaService;
 import es.asv.sigep.service.RegistroService;
 
@@ -31,6 +32,9 @@ public class RegistrosController {
 
 	@Autowired
 	private RegistroService registroService;
+	
+	@Autowired
+	private PersonaService personaService;
 
 	/**
 	 * Muesta la pantaslla de calendario
@@ -41,7 +45,7 @@ public class RegistrosController {
 	private String mostrarCalendario(Model model) {
 
 		ControllerUtils.modelFooter(model);
-		ControllerUtils.modelPersona(model);
+		ControllerUtils.modelPersona(personaService, model);
 
 		return "registro/calendario";
 	}
@@ -50,7 +54,7 @@ public class RegistrosController {
 
 		model.addAttribute("registro", registro);
 		ControllerUtils.modelFooter(model);
-		ControllerUtils.modelPersona(model);
+		ControllerUtils.modelPersona(personaService, model);
 
 		return "registro/fecha";
 	}
@@ -59,7 +63,7 @@ public class RegistrosController {
 	public String inicio(Model model) {
 
 		// Practicas el alumno
-		PracticaDTO practica = practicaService.findByAlumno(ControllerUtils.obtenerUsuario().getId());
+		PracticaDTO practica = practicaService.findByAlumno(ControllerUtils.obtenerUsuario(personaService).getId());
 
 		if (practica != null) {
 
@@ -169,7 +173,7 @@ public class RegistrosController {
 	public String fecha(@PathVariable("fecha") LocalDate fecha, Model model) {
 
 		// Practicas el alumno
-		PracticaDTO practica = practicaService.findByAlumno(ControllerUtils.obtenerUsuario().getId());
+		PracticaDTO practica = practicaService.findByAlumno(ControllerUtils.obtenerUsuario(personaService).getId());
 
 		if (practica != null && fecha != null) {
 
@@ -227,7 +231,7 @@ public class RegistrosController {
 		}
 
 		// Ponemos la practica del usuario loqueado
-		PracticaDTO practica = practicaService.findByAlumno(ControllerUtils.obtenerUsuario().getId());
+		PracticaDTO practica = practicaService.findByAlumno(ControllerUtils.obtenerUsuario(personaService).getId());
 
 		// Guardamo la practica completa en el registro
 		registro.setPractica(practica);

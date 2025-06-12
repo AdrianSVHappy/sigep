@@ -56,7 +56,7 @@ public class PersonaController {
 	private String mostrarTabla(Model model) {
 
 		ControllerUtils.modelFooter(model);
-		ControllerUtils.modelPersona(model);
+		ControllerUtils.modelPersona(personaService, model);
 
 		return "persona/listaAlumnos";
 	}
@@ -71,7 +71,7 @@ public class PersonaController {
 	private String mostrarDetalle(PersonaDTO alumno, Model model) {
 
 		ControllerUtils.modelFooter(model);
-		ControllerUtils.modelPersona(model);
+		ControllerUtils.modelPersona(personaService, model);
 		model.addAttribute("alumno", alumno);
 
 		return "persona/detallePersona";
@@ -87,7 +87,7 @@ public class PersonaController {
 	private String mostrarFormulario(PersonaDTO personaForm, Model model) {
 
 		ControllerUtils.modelFooter(model);
-		ControllerUtils.modelPersona(model);
+		ControllerUtils.modelPersona(personaService, model);
 
 		// En caso de que sea una persona nueva
 		if (personaForm == null)
@@ -116,7 +116,7 @@ public class PersonaController {
 	@GetMapping("/alumnos")
 	public String inicio(Model model) {
 
-		List<PracticaDTO> practicas = practicaService.findAllByTutor(ControllerUtils.obtenerUsuario());
+		List<PracticaDTO> practicas = practicaService.findAllByTutor(ControllerUtils.obtenerUsuario(personaService));
 		List<PersonaDTO> alumnos = new ArrayList<>();
 
 		for (PracticaDTO practica : practicas) {
@@ -140,8 +140,8 @@ public class PersonaController {
 	public String detalle(@PathVariable("id") final Long id, final Model model) {
 
 		// Propio
-		if (ControllerUtils.obtenerUsuario().getId() == id) {
-			return mostrarDetalle(ControllerUtils.obtenerUsuario(), model);
+		if (ControllerUtils.obtenerUsuario(personaService).getId() == id) {
+			return mostrarDetalle(ControllerUtils.obtenerUsuario(personaService), model);
 		}
 
 		PersonaDTO alumno = personaService.findById(id);
@@ -153,8 +153,8 @@ public class PersonaController {
 		}
 
 		// Tutor
-		if (ControllerUtils.obtenerUsuario().getRol() == RolEnum.P
-				&& practicaService.existsByTutorAndAlumno(ControllerUtils.obtenerUsuario(), alumno)) {
+		if (ControllerUtils.obtenerUsuario(personaService).getRol() == RolEnum.P
+				&& practicaService.existsByTutorAndAlumno(ControllerUtils.obtenerUsuario(personaService), alumno)) {
 			return mostrarDetalle(alumno, model);
 		}
 
@@ -164,7 +164,7 @@ public class PersonaController {
 
 	@GetMapping("/form")
 	public String formulario(Model model) {
-		return mostrarFormulario(ControllerUtils.obtenerUsuario(), model);
+		return mostrarFormulario(ControllerUtils.obtenerUsuario(personaService), model);
 	}
 
 	@PostMapping("/guardar")
@@ -186,10 +186,8 @@ public class PersonaController {
 		//Guardamos los datos de la persona
 		personaService.save(personaForm);
 		
-		//Si el usuario guardado es el que ha iniciado sesion
-		if(personaForm.getId() == ControllerUtils.obtenerUsuario().getId())
-			ControllerUtils.iniciarUsuario(ControllerUtils.obtenerUsuario().getId(), personaService);
-
-		return mostrarDetalle(ControllerUtils.obtenerUsuario(), model);
+		//TODO modificar user si se ha modificado el email
+		
+		return mostrarDetalle(ControllerUtils.obtenerUsuario(personaService), model);
 	}
 }

@@ -43,7 +43,7 @@ public class MensajesController {
 	private String mostrarLista(Model model) {
 
 		ControllerUtils.modelFooter(model);
-		ControllerUtils.modelPersona(model);
+		ControllerUtils.modelPersona(personaService, model);
 
 		return "mensaje/listaMensajes";
 
@@ -52,7 +52,7 @@ public class MensajesController {
 	private String mostrarFormulario(Model model) {
 
 		ControllerUtils.modelFooter(model);
-		ControllerUtils.modelPersona(model);
+		ControllerUtils.modelPersona(personaService, model);
 
 		return "mensaje/nuevo";
 	}
@@ -61,10 +61,10 @@ public class MensajesController {
 	public String inicio(Model model) {
 
 		List<MensajeDTO> lista = mensajeService
-				.findAllByAutorOrReceptorOrderByFechaDesc(ControllerUtils.obtenerUsuario());
+				.findAllByAutorOrReceptorOrderByFechaDesc(ControllerUtils.obtenerUsuario(personaService));
 
 		model.addAttribute("listaMensajes", lista);
-		ControllerUtils.modelPersona(model);
+		ControllerUtils.modelPersona(personaService, model);
 
 		return mostrarLista(model);
 
@@ -73,8 +73,8 @@ public class MensajesController {
 	@GetMapping("/nuevo")
 	public String nuevoMensaje(Model model) {
 
-		if (ControllerUtils.obtenerUsuario().getRol() == RolEnum.P) {
-			List<PracticaDTO> practicas = practicaService.findAllByTutor(ControllerUtils.obtenerUsuario());
+		if (ControllerUtils.obtenerUsuario(personaService).getRol() == RolEnum.P) {
+			List<PracticaDTO> practicas = practicaService.findAllByTutor(ControllerUtils.obtenerUsuario(personaService));
 			List<PersonaDTO> alumnos = new ArrayList<>();
 
 			for (PracticaDTO practica : practicas) {
@@ -94,8 +94,8 @@ public class MensajesController {
 	@PostMapping("/enviar")
 	public String enviarMensaje(@ModelAttribute("mensaje") MensajeDTO mensaje, Model model) {
 
-		if ((ControllerUtils.obtenerUsuario().getRol() == RolEnum.P) && (mensaje.getReceptor().getId() != -1)
-				&& (!practicaService.existsByTutorAndAlumno(ControllerUtils.obtenerUsuario(), mensaje.getReceptor()))) {
+		if ((ControllerUtils.obtenerUsuario(personaService).getRol() == RolEnum.P) && (mensaje.getReceptor().getId() != -1)
+				&& (!practicaService.existsByTutorAndAlumno(ControllerUtils.obtenerUsuario(personaService), mensaje.getReceptor()))) {
 
 			// TODO Hacer error el tutor y el alumno no tienen relación
 			return ControllerUtils.mostarError(0, model);
@@ -103,23 +103,23 @@ public class MensajesController {
 		}
 
 		// Establecemos los datos estaticos
-		mensaje.setAutor(ControllerUtils.obtenerUsuario());
+		mensaje.setAutor(ControllerUtils.obtenerUsuario(personaService));
 		mensaje.setFecha(LocalDateTime.now());
 
 		if (mensaje.getReceptor().getId() != -1) {
 			// Establecer datos del receptor para profesor
-			if (ControllerUtils.obtenerUsuario().getRol() == RolEnum.P)
+			if (ControllerUtils.obtenerUsuario(personaService).getRol() == RolEnum.P)
 				mensaje.setReceptor(personaService.findById(mensaje.getReceptor().getId()));
 
 			// Establecer datos del receptor para alumno
-			if (ControllerUtils.obtenerUsuario().getRol() == RolEnum.E)
-				mensaje.setReceptor(practicaService.findByAlumno(ControllerUtils.obtenerUsuario().getId()).getTutor());
+			if (ControllerUtils.obtenerUsuario(personaService).getRol() == RolEnum.E)
+				mensaje.setReceptor(practicaService.findByAlumno(ControllerUtils.obtenerUsuario(personaService).getId()).getTutor());
 
 			mensajeService.save(mensaje);
 
 		} else {
 			// Se envia mensajes a todos los alumnos
-			List<PracticaDTO> practicas = practicaService.findAllByTutor(ControllerUtils.obtenerUsuario());
+			List<PracticaDTO> practicas = practicaService.findAllByTutor(ControllerUtils.obtenerUsuario(personaService));
 
 			for (PracticaDTO practica : practicas) {
 				mensaje.setReceptor(practica.getAlumno());

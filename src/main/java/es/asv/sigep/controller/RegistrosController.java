@@ -32,7 +32,7 @@ public class RegistrosController {
 
 	@Autowired
 	private RegistroService registroService;
-	
+
 	@Autowired
 	private PersonaService personaService;
 
@@ -224,9 +224,11 @@ public class RegistrosController {
 
 		}
 
-		if (registro.getHoraInicio().isAfter(registro.getHoraFin())
-				|| registro.getHoraInicio2().isAfter(registro.getHoraFin2())) {
-			//TODO Hacer error horas no valida, la de inicio es postarior a la de fin
+		if ((registro.getHoraInicio() != null && registro.getHoraFin() != null
+				&& registro.getHoraInicio().isAfter(registro.getHoraFin()))
+				|| (registro.getHoraInicio2() != null && registro.getHoraFin2() != null
+						&& registro.getHoraInicio2().isAfter(registro.getHoraFin2()))) {
+			// TODO Hacer error horas no valida, la de inicio es postarior a la de fin
 			return ControllerUtils.mostarError(0, model);
 		}
 

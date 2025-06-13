@@ -1,9 +1,8 @@
 package es.asv.sigep.controller;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import es.asv.sigep.service.UbicacionService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,24 +11,25 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import es.asv.sigep.converter.OrganizacionConverter;
 import es.asv.sigep.dto.OrganizacionDTO;
 import es.asv.sigep.dto.PersonaDTO;
 import es.asv.sigep.dto.PracticaDTO;
 import es.asv.sigep.dto.UbicacionDTO;
-import es.asv.sigep.entities.OrganizacionEntity;
-import es.asv.sigep.entities.PersonaEntity;
-import es.asv.sigep.entities.UbicacionEntity;
 import es.asv.sigep.enums.RolEnum;
+import es.asv.sigep.enums.TipoEnum;
 import es.asv.sigep.service.OrganizacionService;
 import es.asv.sigep.service.PersonaService;
 import es.asv.sigep.service.PracticaService;
+import es.asv.sigep.service.UbicacionService;
 
 @Controller
 @RequestMapping("/persona")
 public class PersonaController {
 
-    private final UbicacionService ubicacionService;
+	private final UbicacionService ubicacionService;
 
 	private final OrganizacionConverter organizacionConverter;
 
@@ -100,7 +100,7 @@ public class PersonaController {
 		model.addAttribute("personaForm", personaForm);
 
 		// Todas las organisaciones
-		List<OrganizacionDTO> organizaciones = organizacionService.findAll();
+		List<OrganizacionDTO> organizaciones = organizacionService.findAllByTipo(TipoEnum.I);
 		model.addAttribute("organizaciones", organizaciones);
 
 		return "persona/formulario";
@@ -140,7 +140,7 @@ public class PersonaController {
 	public String detalle(@PathVariable("id") final Long id, final Model model) {
 
 		// Propio
-		if (ControllerUtils.obtenerUsuario(personaService).getId() == id) {
+		if (ControllerUtils.obtenerUsuario(personaService).getId().equals(id)) {
 			return mostrarDetalle(ControllerUtils.obtenerUsuario(personaService), model);
 		}
 
@@ -175,19 +175,48 @@ public class PersonaController {
 			return ControllerUtils.mostarError(0, model);
 		}
 
-		if (personaForm.getOrganizacion() == null) {
+		if (personaForm.getRol() == RolEnum.P && personaForm.getOrganizacion() == null) {
 			// TODO Hacer error no se ha guardado los datos de la organizacipn
 			return ControllerUtils.mostarError(0, model);
 		}
 
-		//Guardamos los datos de la ubucacion
-		ubicacionService.save(personaForm.getUbicacion());
-		
-		//Guardamos los datos de la persona
+		// Guardamos los datos de la ubucacion
+		// ubicacionService.save(personaForm.getUbicacion());
+
+		personaForm.setOrganizacion(personaService.findById(personaForm.getId()).getOrganizacion());
+
+		// Guardamos los datos de la persona
 		personaService.save(personaForm);
-		
-		//TODO modificar user si se ha modificado el email
-		
+
+		// TODO modificar user si se ha modificado el email
+
 		return mostrarDetalle(ControllerUtils.obtenerUsuario(personaService), model);
 	}
+
+	@GetMapping("/cambiarPassw")
+	public String cambiarContra(Model model) {
+
+		model.addAttribute("persona", ControllerUtils.obtenerUsuario(personaService));
+
+		return "persona/passForm";
+	}
+
+	@PostMapping("/guardarPass")
+	public String guardarContra(@RequestParam("pass1") String pass1, @RequestParam("pass2") String pass2,
+			Model model) {
+
+		if(pass1 == null || pass2 == null ) {
+			//TODO Error faltan datos
+		}
+		
+		if(!pass1.equals(pass2)) {
+			//TODO Error las contraseñas no coinciden
+		}
+		
+		personaService.actualizarPass(ControllerUtils.obtenerUsuario(personaService).getEmail(), pass1);
+		
+		return mostrarFormulario(ControllerUtils.obtenerUsuario(personaService), model);
+
+	}
+
 }

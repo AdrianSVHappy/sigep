@@ -9,14 +9,15 @@
 
 <body class="d-flex flex-column" style="min-height: 100vh;">
 	<!-- Navbar -->
-	<header th:insert="~{fragments/menu.html :: menu-profe}" th:if="${persona != null and persona.rol == T(es.asv.sigep.enums.RolEnum).P}">
+	<header th:insert="~{fragments/menu.html :: menu-profe}"
+		th:if="${persona != null and persona.rol == T(es.asv.sigep.enums.RolEnum).P}">
 	</header>
 	<header th:insert="~{fragments/menuAlumno.html :: menu-alumno}"
 		th:if="${persona != null and persona.rol == T(es.asv.sigep.enums.RolEnum).E}"></header>
 
 	<!-- Contenedor principal -->
 	<div class="container mt-5 flex-grow-1">
-		<h2 th:text="${personaForm.id} == null ? 'Nueva persona' : 'Editar datos personales'"></h2>
+		<h2>Editar datos personales</h2>
 		<form th:action="@{/persona/guardar}" method="post" th:object="${personaForm}">
 
 			<div class="mb-5 border rounded p-4 shadow-sm">
@@ -33,28 +34,33 @@
 
 				<div class="mb-3">
 					<label for="email" class="form-label">Email</label>
-					<input type="email" th:field="*{email}" class="form-control" id="email" required />
+					<input type="email" th:field="*{email}" class="form-control" id="email" required readonly />
 				</div>
 
 				<div class="mb-3">
 					<label for="telefono" class="form-label">Teléfono</label>
 					<input type="text" th:field="*{telefono}" class="form-control" id="telefono" />
 				</div>
-				
+
+				<a th:href="@{/persona/cambiarPassw}" class="btn btn-primary" th:if="*{id != null}">Cambiar
+					contraseña</a>
+
+
 				<!-- Campos ocultos -->
 				<input type="hidden" th:field="*{id}" />
 				<input type="hidden" th:field="*{rol}" />
 				<input type="hidden" th:field="*{imagenPerfil}" />
 			</div>
 
-			
+
 
 			<!-- Organizacion -->
-			<div class="mb-5 border rounded p-4 shadow-sm">
+			<div class="mb-5 border rounded p-4 shadow-sm"
+				th:if="${persona != null and persona.rol != T(es.asv.sigep.enums.RolEnum).E}">
 
 				<div class="mb-3">
 					<label for="organizacion" class="form-label">Organización</label>
-					<select th:field="*{organizacion.id}" class="form-select" id="organizacion" required>
+					<select th:field="*{organizacion.id}" class="form-control" id="organizacion" required>
 						<option value="" disabled selected>Seleccione una organización</option>
 						<option th:each="org : ${organizaciones}" th:value="${org.id}" th:text="${org.nombre}">
 						</option>
@@ -67,9 +73,9 @@
 			<!-- Ubicacion -->
 			<div class="mb-5 border rounded p-4 shadow-sm">
 
-				
+
 				<input type="hidden" th:field="*{ubicacion.id}" />
-				
+
 				<div class="mb-3">
 					<label for="pais" class="form-label">País</label>
 					<input type="text" th:field="*{ubicacion.pais}" class="form-control" id="pais" required />

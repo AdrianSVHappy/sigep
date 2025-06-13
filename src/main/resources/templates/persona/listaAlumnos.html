@@ -28,8 +28,8 @@
 						<!-- Información -->
 						<div>
 							<strong th:text="${alumno.nombre + ' ' + alumno.apellidos}"></strong><br>
-							<small text="'Organización: ' + ${alumno.organizacion.nombre}">Organización: </small><br>
-							<small text="'Ubicación: ' + ${alumno.ubicacion.nombre}">Ubicación: </small>
+							<small th:text="'Organización: ' + ${alumno.organizacion.nombre}">Organización: </small><br>
+							<small th:text="'Ubicación: ' + ${alumno.ubicacion.ciudad}">Ubicación: </small>
 						</div>
 					</a>
 				</div>

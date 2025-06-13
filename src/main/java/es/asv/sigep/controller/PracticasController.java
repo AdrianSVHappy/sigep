@@ -1,7 +1,7 @@
 package es.asv.sigep.controller;
 
 import java.util.List;
-import es.asv.sigep.service.UbicacionService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import es.asv.sigep.SigepApplication;
+
 import es.asv.sigep.dto.OrganizacionDTO;
 import es.asv.sigep.dto.PersonaDTO;
 import es.asv.sigep.dto.PracticaDTO;
@@ -20,12 +20,12 @@ import es.asv.sigep.enums.TipoEnum;
 import es.asv.sigep.service.OrganizacionService;
 import es.asv.sigep.service.PersonaService;
 import es.asv.sigep.service.PracticaService;
+import es.asv.sigep.service.UbicacionService;
 
 @Controller
 @RequestMapping("/practica")
 public class PracticasController {
 
-	private final SigepApplication sigepApplication;
 
 	@Autowired
 	private PracticaService practicaService;
@@ -39,9 +39,7 @@ public class PracticasController {
 	@Autowired
 	private UbicacionService ubicacionService;
 
-	PracticasController(SigepApplication sigepApplication) {
-		this.sigepApplication = sigepApplication;
-	}
+
 
 	/**
 	 * Muesta la pantalla de lista de practicas
@@ -261,9 +259,12 @@ public class PracticasController {
 		practicaForm.setTutor(ControllerUtils.obtenerUsuario(personaService));
 		practicaForm.setCentro(ControllerUtils.obtenerUsuario(personaService).getOrganizacion());
 		practicaForm.getAlumno().setNombre(practicaForm.getAlumno().getEmail());
-		practicaForm.getAlumno().setUbicacion(ControllerUtils.obtenerUsuario(personaService).getOrganizacion().getUbicacion());
+		UbicacionDTO nuevaUbi = ControllerUtils.obtenerUsuario(personaService).getOrganizacion().getUbicacion();
+		nuevaUbi.setId(null);
+		practicaForm.getAlumno().setUbicacion(nuevaUbi);
 		practicaForm.getAlumno().setOrganizacion(ControllerUtils.obtenerUsuario(personaService).getOrganizacion());
 		practicaForm.getAlumno().setRol(RolEnum.E);
+		practicaForm.getAlumno().setApellidos(" ");
 
 		// Guardamos los campos nuevos
 		if (practicaForm.getEmpresa().getId() == null) {

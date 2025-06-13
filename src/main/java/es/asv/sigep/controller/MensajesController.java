@@ -106,7 +106,7 @@ public class MensajesController {
 		mensaje.setAutor(ControllerUtils.obtenerUsuario(personaService));
 		mensaje.setFecha(LocalDateTime.now());
 
-		if (mensaje.getReceptor().getId() != -1) {
+		if (mensaje.getReceptor() == null || mensaje.getReceptor().getId() != -1) {
 			// Establecer datos del receptor para profesor
 			if (ControllerUtils.obtenerUsuario(personaService).getRol() == RolEnum.P)
 				mensaje.setReceptor(personaService.findById(mensaje.getReceptor().getId()));

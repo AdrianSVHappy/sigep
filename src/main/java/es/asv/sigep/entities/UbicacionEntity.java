@@ -26,7 +26,7 @@ public class UbicacionEntity {
 	@Column(name = "ID")
 	private Long id;
 
-	@Column(name = "PAIS" , length = 50)
+	@Column(name = "PAIS", length = 50)
 	private String pais;
 
 	@Column(name = "COMUNIDAD", length = 50)

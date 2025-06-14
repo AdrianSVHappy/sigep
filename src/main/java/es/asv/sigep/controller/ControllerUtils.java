@@ -59,6 +59,8 @@ public class ControllerUtils {
 		case 7:
 			msj = "El orden de las fechas es invalido";
 			break;
+		case 8:
+			msj = "El email no se puede repetir";
 		default:
 			
 		}

@@ -9,8 +9,7 @@
 
 <body class="d-flex flex-column" style="min-height: 100vh;">
 	<!-- Menu -->
-	<header th:insert="~{fragments/menuAlumno.html :: menu-alumno}"
-		sec:authorize="hasRole('E')"></header>
+	<header th:insert="~{fragments/menuAlumno.html :: menu-alumno}" sec:authorize="hasRole('E')"></header>
 
 
 	<!-- Contenido principal -->
@@ -51,7 +50,7 @@
 			<div class="mb-3">
 				<label for="texto" class="form-label">Texto</label>
 				<textarea class="form-control" id="texto" name="texto" rows="3" th:text="${registro.texto}"
-					th:readonly="${!registro.registrable}"></textarea>
+					th:readonly="${!registro.registrable}" maxlength="200"></textarea>
 			</div>
 
 			<!-- Campos ocultos -->
@@ -62,8 +61,8 @@
 			<input type="hidden" th:field="${registro.dia}" />
 			<input type="hidden" th:field="${registro.mes}" />
 			<input type="hidden" th:field="${registro.anio}" />
-			
-			
+
+
 			<div class="d-flex justify-content-between">
 				<a th:href="@{/registro/calendario}" class="btn btn-secondary">Volver</a>
 

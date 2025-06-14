@@ -34,47 +34,47 @@ public class RegistroEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID")
 	private Long id;
-	
+
 	@JoinColumn(name = "PRACTICA", referencedColumnName = "ID", nullable = false)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private PracticaEntity practica;
-	
+
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "FECHA", nullable = false)
 	private LocalDate fecha;
-	
+
 	@Column(name = "DIA", length = 2)
 	private Integer dia;
-	
+
 	@Column(name = "MES", length = 2)
 	private Integer mes;
-	
+
 	@Column(name = "ANIO")
 	private Integer anio;
-	
+
 	@DateTimeFormat(pattern = "HH:mm")
 	@Column(name = "INICIO")
 	private LocalTime horaInicio;
-	
+
 	@DateTimeFormat(pattern = "HH:mm")
 	@Column(name = "FIN")
 	private LocalTime horaFin;
-	
+
 	@DateTimeFormat(pattern = "HH:mm")
 	@Column(name = "INICIO2")
 	private LocalTime horaInicio2;
-	
+
 	@DateTimeFormat(pattern = "HH:mm")
 	@Column(name = "FIN2")
 	private LocalTime horaFin2;
-	
+
 	@Column(name = "TEXTO", length = 200)
 	private String texto;
-	
+
 	@Column(name = "REGISTRABLE")
 	private boolean registrable;
-	
+
 	@Column(name = "REGISTRADO")
 	private boolean registrado;
-	
+
 }

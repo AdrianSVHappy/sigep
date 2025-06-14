@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +30,8 @@ import es.asv.sigep.service.UbicacionService;
 @RequestMapping("/persona")
 public class PersonaController {
 
+	private final SecurityFilterChain securityFilterChain;
+
 	private final UbicacionService ubicacionService;
 
 	private final OrganizacionConverter organizacionConverter;
@@ -42,9 +45,11 @@ public class PersonaController {
 	@Autowired
 	private OrganizacionService organizacionService;
 
-	PersonaController(OrganizacionConverter organizacionConverter, UbicacionService ubicacionService) {
+	PersonaController(OrganizacionConverter organizacionConverter, UbicacionService ubicacionService,
+			SecurityFilterChain securityFilterChain) {
 		this.organizacionConverter = organizacionConverter;
 		this.ubicacionService = ubicacionService;
+		this.securityFilterChain = securityFilterChain;
 	}
 
 	/**
@@ -177,8 +182,9 @@ public class PersonaController {
 			return ControllerUtils.mostarError(0, personaService, model);
 		}
 
-		// Guardamos los datos de la ubucacion
-		// ubicacionService.save(personaForm.getUbicacion());
+		if (personaService.existsByEmail(personaForm.getEmail())) {
+			return ControllerUtils.mostarError(8, personaService, model);
+		}
 
 		personaForm.setOrganizacion(personaService.findById(personaForm.getId()).getOrganizacion());
 

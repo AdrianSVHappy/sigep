@@ -29,7 +29,6 @@ public class PracticasController {
 	@Autowired
 	private PracticaService practicaService;
 
-	//TODO cmprobar que no se repite el correo del alumno
 	@Autowired
 	private PersonaService personaService;
 
@@ -298,6 +297,10 @@ public class PracticasController {
 			return ControllerUtils.mostarError(7, personaService, model);
 		}
 
+		if(personaService.existsByEmail(practica.getAlumno().getEmail()) || personaService.existsByEmail(practica.getResponsable().getEmail())) {
+			return ControllerUtils.mostarError(8, personaService, model);
+		}
+		
 		return null;
 	}
 

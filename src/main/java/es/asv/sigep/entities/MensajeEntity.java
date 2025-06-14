@@ -34,23 +34,23 @@ public class MensajeEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID")
 	private Long id;
-	
+
 	@JoinColumn(name = "AUTOR", referencedColumnName = "ID", nullable = false)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private PersonaEntity autor;
-	
+
 	@JoinColumn(name = "RECEPTOR", referencedColumnName = "ID", nullable = false)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private PersonaEntity receptor;
-	
+
 	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
 	@Column(name = "FECHA", nullable = false)
 	private LocalDateTime fecha;
-	
+
 	@Column(name = "ASUNTO", length = 50)
 	private String asunto;
-	
+
 	@Column(name = "TEXTO", length = 200)
 	private String texto;
-	
+
 }

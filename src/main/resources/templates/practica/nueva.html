@@ -76,12 +76,12 @@
 				<!--Campos para el nuevo responsables-->
 				<div class="mb-3">
 					<label for="rNombre" class="form-label">Nombre</label>
-					<input type="text" th:field="*{responsable.nombre}" class="form-control" id="rNombre" />
+					<input type="text" th:field="*{responsable.nombre}" class="form-control" id="rNombre" maxlength="50" />
 				</div>
 
 				<div class="mb-3">
 					<label for="rApellidos" class="form-label">Apellidos</label>
-					<input type="text" th:field="*{responsable.apellidos}" class="form-control" id="rApellidos" />
+					<input type="text" th:field="*{responsable.apellidos}" class="form-control" id="rApellidos" maxlength="100"/>
 				</div>
 
 				<div class="mb-3">
@@ -91,7 +91,7 @@
 
 				<div class="mb-3">
 					<label for="rTelefono" class="form-label">Teléfono</label>
-					<input type="tel" th:field="*{responsable.telefono}" class="form-control" id="rTelefono" />
+					<input type="tel" th:field="*{responsable.telefono}" class="form-control" id="rTelefono" maxlength="14"/>
 				</div>
 
 			</div>
@@ -116,33 +116,33 @@
 
 				<div class="mb-3">
 					<label for="eNombre" class="form-label">Nombre</label>
-					<input type="text" th:field="*{empresa.nombre}" class="form-control" id="rNombre" />
+					<input type="text" th:field="*{empresa.nombre}" class="form-control" id="rNombre"  maxlength="50" />
 				</div>
 
 				<div class="mb-3">
 					<label for="ePais" class="form-label">País</label>
-					<input type="text" th:field="*{empresa.ubicacion.pais}" class="form-control" id="ePais" />
+					<input type="text" th:field="*{empresa.ubicacion.pais}" class="form-control" id="ePais"  maxlength="50" />
 				</div>
 
 				<div class="mb-3">
 					<label for="eComunidad" class="form-label">Comunidad</label>
-					<input type="text" th:field="*{empresa.ubicacion.comunidad}" class="form-control" id="eComunidad" />
+					<input type="text" th:field="*{empresa.ubicacion.comunidad}" class="form-control" id="eComunidad"  maxlength="50" />
 				</div>
 
 				<div class="mb-3">
 					<label for="eProvincia" class="form-label">Provincia</label>
-					<input type="text" th:field="*{empresa.ubicacion.provincia}" class="form-control" id="eProvincia" />
+					<input type="text" th:field="*{empresa.ubicacion.provincia}" class="form-control" id="eProvincia"  maxlength="50" />
 				</div>
 
 				<div class="mb-3">
 					<label for="eCiudad" class="form-label">Ciudad</label>
-					<input type="text" th:field="*{empresa.ubicacion.ciudad}" class="form-control" id="eCiudad" />
+					<input type="text" th:field="*{empresa.ubicacion.ciudad}" class="form-control" id="eCiudad"  maxlength="100" />
 				</div>
 
 				<div class="mb-3">
 					<label for="eCodigoPostal" class="form-label">Código Postal</label>
 					<input type="text" th:field="*{empresa.ubicacion.codigoPostal}" class="form-control"
-						id="eCodigoPostal" />
+						id="eCodigoPostal"  maxlength="5" />
 				</div>
 
 				<div class="mb-3">

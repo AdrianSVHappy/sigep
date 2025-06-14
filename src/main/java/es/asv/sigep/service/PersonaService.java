@@ -38,7 +38,7 @@ public class PersonaService {
 
 	@Autowired
 	private PersonaConverter personaConverter;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
@@ -73,10 +73,10 @@ public class PersonaService {
 			per = permisoRepository.save(per);
 		}
 
-		if(persona.getApellidos() == null) {
+		if (persona.getApellidos() == null) {
 			persona.setApellidos("");
 		}
-		
+
 		PersonaEntity guardado = personaRepository.save(personaConverter.convert(persona));
 
 		return personaConverter.convert(guardado);
@@ -106,15 +106,17 @@ public class PersonaService {
 		return personaConverter.convert(entity);
 	}
 
-
-
 	public void actualizarPass(String email, String pass) {
-		
+
 		Optional<UsuarioEntity> usr = usuarioRepository.findById(email);
-		
-		if(usr != null) {
+
+		if (usr != null) {
 			usr.get().setPassw(passwordEncoder.encode(pass));
 			usuarioRepository.save(usr.get());
 		}
+	}
+
+	public boolean existsByEmail(String email) {
+		return personaRepository.existsByEmail(email);
 	}
 }

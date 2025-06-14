@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>SIGEP</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+</head>
+
+<body class="d-flex flex-column" style="min-height: 100vh;">
+	<!-- Navbar -->
+	<header th:insert="~{fragments/menu.html :: menu-profe}"></header>
+
+	<!-- Contenedor principal -->
+	<div class="container mt-5 flex-grow-1">
+		<h2>Tabla registros</h2>
+
+		<table class="table table-striped table-bordered">
+			<thead class="thead-dark">
+				<tr>
+					<th>Fecha</th>
+					<th>Hora Inicio</th>
+					<th>Hora Fin</th>
+					<th>Hora Inicio 2</th>
+					<th>Hora Fin 2</th>
+					<th>Texto</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="registro : ${registros}">
+					<td th:text="${#temporals.format(registro.fecha, 'dd/MM/yyyy')}"></td>
+					<td th:text="${registro.horaInicio != null ? #temporals.format(registro.horaInicio, 'HH:mm') : ''}">
+					</td>
+					<td th:text="${registro.horaFin != null ? #temporals.format(registro.horaFin, 'HH:mm') : ''}"></td>
+					<td
+						th:text="${registro.horaInicio2 != null ? #temporals.format(registro.horaInicio2, 'HH:mm') : ''}">
+					</td>
+					<td th:text="${registro.horaFin2 != null ? #temporals.format(registro.horaFin2, 'HH:mm') : ''}">
+					</td>
+					<td th:text="${registro.texto}"></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div class="text-left">
+			<a th:href="@{/practica/detalle/{id}(id=${practicaId})}" class="btn btn-secondary">Volver</a>
+		</div>
+
+	</div>
+
+	<!-- Footer -->
+	<footer th:insert="~{fragments/footer.html :: footer}" class="bg-dark text-white py-4 mt-5"></footer>
+
+
+	<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	<!-- Popper.js -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<!-- Bootstrap JS -->
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

@@ -9,14 +9,24 @@
 
 <body>
 	<!-- Navbar -->
-	<header th:insert="~{fragments/menu.html :: menu-profe}" th:if="${persona != null and persona.rol == T(es.asv.sigep.enums.RolEnum).P}">
+	<header th:insert="~{fragments/menu.html :: menu-profe}"
+		sec:authorize="hasRole('P')">
 	</header>
 	<header th:insert="~{fragments/menuAlumno.html :: menu-alumno}"
-		th:if="${persona != null and persona.rol == T(es.asv.sigep.enums.RolEnum).E}"></header>
+		sec:authorize="hasRole('E')"></header>
+
 
 	<!-- Contenedor principal -->
 	<div class="container mt-5">
 		<h2 class="mb-4">Detalle de la Práctica</h2>
+
+		<!-- Lista de registros-->
+		<div class="text-right mb-3">
+			<a th:href="@{/registro/registros/{id}(id=${practica.id})}" class="btn btn-sm btn-outline-primary"
+				sec:authorize="hasRole('P')">Ver
+				Registros</a>
+		</div>
+
 
 		<!-- Datos del Alumno -->
 		<div class="card mb-4">
@@ -45,7 +55,8 @@
 			<div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
 				<span>Datos de la Práctica</span>
 				<a th:href="@{/practica/form/{id}/{tipo}(id=${practica.id}, tipo='D')}"
-					class="btn btn-sm btn-outline-light">Editar</a>
+					class="btn btn-sm btn-outline-light"
+					sec:authorize="hasRole('P')">Editar</a>
 			</div>
 
 
@@ -85,10 +96,11 @@
 		<!-- Datos del Responsable -->
 		<div class="card mb-4">
 			<div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
-						<span>Responsable</span>
-						<a th:href="@{/practica/form/{id}/{tipo}(id=${practica.id}, tipo='E')}"
-							class="btn btn-sm btn-outline-light">Editar</a>
-					</div>
+				<span>Responsable</span>
+				<a th:href="@{/practica/form/{id}/{tipo}(id=${practica.id}, tipo='E')}"
+					class="btn btn-sm btn-outline-light"
+					sec:authorize="hasRole('P')">Editar</a>
+			</div>
 			<div class="card-body">
 				<p><strong>Nombre:</strong> <span
 						th:text="${practica.responsable.nombre + ' ' + practica.responsable.apellidos}"></span></p>
@@ -110,15 +122,15 @@
 
 		<div class="text-left">
 			<a th:href="@{/practica/practicas}" class="btn btn-secondary"
-				th:if="${persona != null and persona.rol == T(es.asv.sigep.enums.RolEnum).P}">Volver</a>
+				sec:authorize="hasRole('P')">Volver</a>
 		</div>
 	</div>
 
 	<!-- Footer -->
 	<footer th:insert="~{fragments/footer.html :: footer}" class="bg-dark text-white py-4 mt-5"
-		th:if="${persona != null and persona.rol == T(es.asv.sigep.enums.RolEnum).P}"></footer>
+		sec:authorize="hasRole('P')"></footer>
 	<footer th:insert="~{fragments/footerAlumno.html :: footer-alumno}" class="bg-dark text-white py-4 mt-5"
-		th:if="${persona != null and persona.rol == T(es.asv.sigep.enums.RolEnum).E}"></footer>
+		sec:authorize="hasRole('E')"></footer>
 
 	<!-- jQuery -->
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>

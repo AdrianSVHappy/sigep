@@ -59,11 +59,21 @@ public class RegistrosController {
 		return "registro/fecha";
 	}
 
+	private String mostrarTabla(List<RegistroDTO> registros, Long practicaId, Model model) {
+
+		model.addAttribute("registros", registros);
+		model.addAttribute("practicaId", practicaId);
+		ControllerUtils.modelPersona(personaService, model);
+		ControllerUtils.modelFooter(model);
+
+		return "registro/tablaRegistros";
+	}
+
 	@GetMapping("calendario")
 	public String inicio(Model model) {
 
 		// Practicas el alumno
-		PracticaDTO practica = practicaService.findByAlumno(ControllerUtils.obtenerUsuario(personaService).getId());
+		PracticaDTO practica = practicaService.findByAlumno(ControllerUtils.obtenerUsuario(personaService));
 
 		if (practica != null) {
 
@@ -88,7 +98,7 @@ public class RegistrosController {
 		RegistroDTO[] semana = new RegistroDTO[7];
 
 		// Dias registrados
-		List<RegistroDTO> diasRegistrados = registroService.findAllByPractica(practica.getId());
+		List<RegistroDTO> diasRegistrados = registroService.findAllByPracticaOrderByFechaAsc(practica.getId());
 
 		// Horas totales consumidas
 		float consumido = 0;
@@ -173,7 +183,7 @@ public class RegistrosController {
 	public String fecha(@PathVariable("fecha") LocalDate fecha, Model model) {
 
 		// Practicas el alumno
-		PracticaDTO practica = practicaService.findByAlumno(ControllerUtils.obtenerUsuario(personaService).getId());
+		PracticaDTO practica = practicaService.findByAlumno(ControllerUtils.obtenerUsuario(personaService));
 
 		if (practica != null && fecha != null) {
 
@@ -195,9 +205,8 @@ public class RegistrosController {
 
 		}
 
-		// TODO Mostrar mensaje de error
 		// Error de permiso
-		return ControllerUtils.mostarError(0, model);
+		return ControllerUtils.mostarError(-1, personaService, model);
 
 	}
 
@@ -210,30 +219,25 @@ public class RegistrosController {
 
 		// Error si no se pasa un registro
 		if (registro == null)
-			return ControllerUtils.mostarError(0, model);
+			return ControllerUtils.mostarError(0, personaService, model);
 
 		if (!registro.isRegistrable()) {
-			// TODO Hacer error de que el registro no se puede guardar
-			return ControllerUtils.mostarError(0, model);
+			return ControllerUtils.mostarError(4, personaService, model);
 		}
 
 		if (registro.getHoraInicio() == null) {
-			// TODO Hacer error de que el registro no se puede guardar sin al menos la hora
-			// de entrada
-			return ControllerUtils.mostarError(0, model);
-
+			return ControllerUtils.mostarError(2, personaService, model);
 		}
 
 		if ((registro.getHoraInicio() != null && registro.getHoraFin() != null
 				&& registro.getHoraInicio().isAfter(registro.getHoraFin()))
 				|| (registro.getHoraInicio2() != null && registro.getHoraFin2() != null
 						&& registro.getHoraInicio2().isAfter(registro.getHoraFin2()))) {
-			// TODO Hacer error horas no valida, la de inicio es postarior a la de fin
-			return ControllerUtils.mostarError(0, model);
+			return ControllerUtils.mostarError(5, personaService, model);
 		}
 
 		// Ponemos la practica del usuario loqueado
-		PracticaDTO practica = practicaService.findByAlumno(ControllerUtils.obtenerUsuario(personaService).getId());
+		PracticaDTO practica = practicaService.findByAlumno(ControllerUtils.obtenerUsuario(personaService));
 
 		// Guardamo la practica completa en el registro
 		registro.setPractica(practica);
@@ -246,6 +250,18 @@ public class RegistrosController {
 
 		// Todo ha salido bien
 		return inicio(model);
+	}
+
+	@GetMapping("/registros/{id}")
+	public String mostrarRegistros(@PathVariable("id") Long id, Model model) {
+
+		if (!registroService.existsById(id)) {
+			return ControllerUtils.mostarError(3, personaService, model);
+		}
+
+		List<RegistroDTO> registros = registroService.findAllByPracticaOrderByFechaAsc(id);
+
+		return mostrarTabla(registros, id, model);
 	}
 
 }

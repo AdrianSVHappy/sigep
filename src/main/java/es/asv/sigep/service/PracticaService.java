@@ -91,13 +91,13 @@ public class PracticaService {
 		return practicaConverter.convert(practica);
 	}
 
-	public PracticaDTO findByAlumno(Long alumnoId) {
+	public PracticaDTO findByAlumno(PersonaDTO alumno) {
 		PracticaEntity practica = null;
-		PersonaEntity alumno = personaRepository.findById(alumnoId).orElse(null);
+		PersonaEntity alumnoE = personaConverter.convert(alumno);
 
 		// Si el alumno no es nulo
-		if (alumno != null) {
-			practica = practicaRepository.findByAlumno(alumno).orElse(null);
+		if (alumnoE != null) {
+			practica = practicaRepository.findByAlumno(alumnoE).orElse(null);
 		}
 
 		return practicaConverter.convert(practica);

@@ -77,8 +77,3 @@ public class HomeController {
 
 }
 
-//TODO cuando un tutor edita los datos de un resoponsable ya guardado no se actualiza 
-//TODO En la lista de alumnos de la vista de enviar mensaje del profesor, los alumnos sin apellidos aparecen en null
-//TODO En la edición de alumno, el alumno puede editar su centro, quitar la opción de editar eso
-//TODO En la vista de detalle de las practicas, a los alumnos no les puede aparecer el boton de editar
-//TODO Pensar en como un tutor purde ver los registros de un alumno

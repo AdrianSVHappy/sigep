@@ -15,7 +15,7 @@ public interface RegistroRepository extends JpaRepository<RegistroEntity, Long>{
 
 	boolean existsByPracticaAndFecha(PracticaEntity practica, LocalDate fecha);
 	
-	List<RegistroEntity> findAllByPractica(PracticaEntity practica);
+	List<RegistroEntity> findAllByPracticaOrderByFechaAsc(PracticaEntity practica);
 	
 	Optional<RegistroEntity> findByPracticaAndFecha(PracticaEntity practica, LocalDate fecha);
 }

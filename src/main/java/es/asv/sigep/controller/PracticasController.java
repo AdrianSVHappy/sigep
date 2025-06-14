@@ -26,7 +26,6 @@ import es.asv.sigep.service.UbicacionService;
 @RequestMapping("/practica")
 public class PracticasController {
 
-
 	@Autowired
 	private PracticaService practicaService;
 
@@ -38,8 +37,6 @@ public class PracticasController {
 
 	@Autowired
 	private UbicacionService ubicacionService;
-
-
 
 	/**
 	 * Muesta la pantalla de lista de practicas
@@ -149,7 +146,7 @@ public class PracticasController {
 
 		// Alumno
 		if (ControllerUtils.obtenerUsuario(personaService).getRol() == RolEnum.E) {
-			practica = practicaService.findByAlumno(ControllerUtils.obtenerUsuario(personaService).getId());
+			practica = practicaService.findByAlumno(ControllerUtils.obtenerUsuario(personaService));
 		}
 
 		// Profesor
@@ -162,9 +159,8 @@ public class PracticasController {
 			return mostarDetalle(practica, model);
 		}
 
-		// TODO Mostrar mensaje de error
 		// Error de permiso
-		return ControllerUtils.mostarError(0, model);
+		return ControllerUtils.mostarError(-1, personaService, model);
 
 	}
 
@@ -200,20 +196,13 @@ public class PracticasController {
 			return mostrarFormularioNuevo(practicaBlanca, model);
 		}
 
-		// TODO Mostrar mensaje de error
 		// Error de permiso
-		return ControllerUtils.mostarError(0, model);
+		return ControllerUtils.mostarError(-1, personaService, model);
 
 	}
 
 	@PostMapping("/guardar")
 	public String guardar(@ModelAttribute("practicaForm") PracticaDTO practicaForm, Model model) {
-
-		// Comprobar que el usuario logueado tiene permiso
-		if (ControllerUtils.obtenerUsuario(personaService).getRol() != RolEnum.P) {
-			// TODO Mostar error de permisos
-			return ControllerUtils.mostarError(0, model);
-		}
 
 		String errorCampos = comprobarCampos(practicaForm, model);
 		if (errorCampos != null)
@@ -221,8 +210,7 @@ public class PracticasController {
 
 		// Comprobar si el numero de la seguridad social está duplicado
 		if (practicaService.existsBynumeroSeguridadSocial(practicaForm.getNumeroSeguridadSocial())) {
-			// TODO Mostrar error el numero de la seguridad social ya está registrado
-			return ControllerUtils.mostarError(0, model);
+			return ControllerUtils.mostarError(6, personaService, model);
 		}
 
 		// Establecer responsable predefinido
@@ -231,8 +219,7 @@ public class PracticasController {
 			PersonaDTO tutorDB = personaService.findById(practicaForm.getResponsable().getId());
 
 			if (tutorDB == null) {
-				// TODO Mostrar error el tutor no existe en la base de datos
-				return ControllerUtils.mostarError(0, model);
+				return ControllerUtils.mostarError(3, personaService, model);
 			}
 
 			practicaForm.setResponsable(tutorDB);
@@ -246,8 +233,7 @@ public class PracticasController {
 			OrganizacionDTO empresaDB = organizacionService.findById(practicaForm.getEmpresa().getId());
 
 			if (empresaDB == null) {
-				// TODO Mostrar error la empresa no existe en la base de datos
-				return ControllerUtils.mostarError(0, model);
+				return ControllerUtils.mostarError(3, personaService, model);
 			}
 
 			practicaForm.setEmpresa(empresaDB);
@@ -284,21 +270,14 @@ public class PracticasController {
 	@GetMapping("/form/{id}/{tipo}")
 	public String form(@PathVariable("id") Long id, @PathVariable("tipo") String tipo, Model model) {
 
-		if (id == null) {
-			// TODO Error id de la practica no valida
-			return ControllerUtils.mostarError(0, model);
-		}
-
 		if (!"D".equals(tipo) && !"E".equals(tipo)) {
-			// TODO tipo de formulario no valido
-			return ControllerUtils.mostarError(0, model);
+			return ControllerUtils.mostarError(-1, personaService, model);
 		}
 
 		PracticaDTO form = practicaService.findById(id);
 
 		if (form == null) {
-			// TODO Error practica no encontrada en la base de datos
-			return ControllerUtils.mostarError(0, model);
+			return ControllerUtils.mostarError(3, personaService, model);
 		}
 
 		return mostrarFormulario(form, model, tipo);
@@ -310,14 +289,12 @@ public class PracticasController {
 		// Comrobar si hay datos obligatorios nulos
 		if (practica == null || practica.getDuracion() < 0 || practica.getInicio() == null
 				|| practica.getFin() == null) {
-			// TODO Mostrar error campos obligatorios vacios
-			return ControllerUtils.mostarError(0, model);
+			return ControllerUtils.mostarError(2, personaService, model);
 		}
 
 		// Comprobar que la fecha de inicio y fin son correctas
 		if (practica.getFin().isBefore(practica.getInicio())) {
-			// TODO Mostrar error la fecha de inicio es postarior a la de fin
-			return ControllerUtils.mostarError(0, model);
+			return ControllerUtils.mostarError(7, personaService, model);
 		}
 
 		return null;
@@ -326,21 +303,10 @@ public class PracticasController {
 	@PostMapping("/editarDatos")
 	public String editarDatos(@ModelAttribute("practicaForm") PracticaDTO practicaForm, Model model) {
 
-		if (practicaForm.getId() == null) {
-			// TODO Error id de la practica no valida
-			return ControllerUtils.mostarError(0, model);
-		}
-
-		if (ControllerUtils.obtenerUsuario(personaService).getRol() != RolEnum.P) {
-			// TODO Error el usuario no tiene permiso para modificar una practica
-			return ControllerUtils.mostarError(0, model);
-		}
-
 		PracticaDTO practicaDB = practicaService.findById(practicaForm.getId());
 
 		if (practicaDB == null) {
-			// TODO Error la practica no existe en la base de datos
-			return ControllerUtils.mostarError(0, model);
+			return ControllerUtils.mostarError(3, personaService, model);
 		}
 
 		// Comprobar que campos se ha modificado
@@ -373,8 +339,7 @@ public class PracticasController {
 		PracticaDTO practicaDB = practicaService.findById(practicaForm.getId());
 
 		if (practicaDB == null) {
-			// TODO mostrar error practica no encontrada en la base de datos
-			ControllerUtils.mostarError(0, model);
+			return ControllerUtils.mostarError(3, personaService, model);
 		}
 
 		// Datos que nunca cambian
@@ -385,14 +350,14 @@ public class PracticasController {
 		practicaForm.getEmpresa().setTipo(TipoEnum.E);
 
 		// No cambia el responsable
-		if (practicaForm.getResponsable().getId() == practicaDB.getResponsable().getId()) {
+		if (practicaDB.getResponsable().getId().equals(practicaForm.getResponsable().getId())) {
 
 			practicaForm.getResponsable().setId((practicaDB.getResponsable().getId()));
 
 			practicaDB.setResponsable(practicaForm.getResponsable());
 
 			// No cambia la empresa
-			if (practicaForm.getEmpresa().getId() == practicaDB.getEmpresa().getId()) {
+			if (practicaDB.getEmpresa().getId().equals(practicaForm.getEmpresa().getId())) {
 
 				practicaForm.getEmpresa().setId(practicaDB.getEmpresa().getId());
 				practicaForm.getResponsable().setOrganizacion(practicaDB.getEmpresa());

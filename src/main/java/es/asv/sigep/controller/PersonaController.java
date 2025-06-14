@@ -148,8 +148,7 @@ public class PersonaController {
 
 		// Alumno no encontado
 		if (alumno == null) {
-			// TODO Mostrar mensaje de error
-			return inicio(model);
+			return ControllerUtils.mostarError(3, personaService, model);
 		}
 
 		// Tutor
@@ -159,7 +158,7 @@ public class PersonaController {
 		}
 
 		// Error de permiso
-		return ControllerUtils.mostarError(0, model);
+		return ControllerUtils.mostarError(-1, personaService, model);
 	}
 
 	@GetMapping("/form")
@@ -171,13 +170,11 @@ public class PersonaController {
 	public String guardar(@ModelAttribute("personaForm") PersonaDTO personaForm, Model model) {
 
 		if (personaForm == null) {
-			// TODO Hacer error no se ha guardado los datos de la persona correctamente
-			return ControllerUtils.mostarError(0, model);
+			return ControllerUtils.mostarError(0, personaService, model);
 		}
 
 		if (personaForm.getRol() == RolEnum.P && personaForm.getOrganizacion() == null) {
-			// TODO Hacer error no se ha guardado los datos de la organizacipn
-			return ControllerUtils.mostarError(0, model);
+			return ControllerUtils.mostarError(0, personaService, model);
 		}
 
 		// Guardamos los datos de la ubucacion
@@ -188,33 +185,31 @@ public class PersonaController {
 		// Guardamos los datos de la persona
 		personaService.save(personaForm);
 
-		// TODO modificar user si se ha modificado el email
-
 		return mostrarDetalle(ControllerUtils.obtenerUsuario(personaService), model);
 	}
 
 	@GetMapping("/cambiarPassw")
 	public String cambiarContra(Model model) {
 
-		model.addAttribute("persona", ControllerUtils.obtenerUsuario(personaService));
+		ControllerUtils.modelPersona(personaService, model);
+		ControllerUtils.modelFooter(model);
 
 		return "persona/passForm";
 	}
 
 	@PostMapping("/guardarPass")
-	public String guardarContra(@RequestParam("pass1") String pass1, @RequestParam("pass2") String pass2,
-			Model model) {
+	public String guardarContra(@RequestParam("pass1") String pass1, @RequestParam("pass2") String pass2, Model model) {
 
-		if(pass1 == null || pass2 == null ) {
-			//TODO Error faltan datos
+		if (pass1 == null || pass2 == null) {
+			return ControllerUtils.mostarError(2, personaService, model);
 		}
-		
-		if(!pass1.equals(pass2)) {
-			//TODO Error las contraseñas no coinciden
+
+		if (!pass1.equals(pass2)) {
+			return ControllerUtils.mostarError(1, personaService, model);
 		}
-		
+
 		personaService.actualizarPass(ControllerUtils.obtenerUsuario(personaService).getEmail(), pass1);
-		
+
 		return mostrarFormulario(ControllerUtils.obtenerUsuario(personaService), model);
 
 	}

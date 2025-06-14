@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
@@ -23,11 +24,12 @@ public class DatabaseSecurity {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests(authorize -> authorize.requestMatchers("/bootstrap/**", "/images/**").permitAll()
-				.requestMatchers("/", "/registrar", "/guardarProfe").permitAll().anyRequest().authenticated())
+				.requestMatchers("/persona/alumnos", "/practica/form/*", "/practica/practicas", "/practica/nueva",
+						"/registro/registros/*")
+				.hasRole("P").requestMatchers("/registro/calendario/*", "/registro/fecha/*").hasRole("E")
+				.requestMatchers("/", "/registrar", "/guardarProfe", "error").permitAll().anyRequest().authenticated())
 				.formLogin(form -> form.permitAll());
 
-		//TODO que no se puedea crear un usuario fuera de mi logica
-		
 		return http.build();
 	}
 
@@ -39,6 +41,9 @@ public class DatabaseSecurity {
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		return NoOpPasswordEncoder.getInstance();
+		return new BCryptPasswordEncoder();
 	}
+
+	// TODO encirptar contraseña
+
 }

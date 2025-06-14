@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import es.asv.sigep.converter.PersonaConverter;
@@ -37,6 +38,9 @@ public class PersonaService {
 
 	@Autowired
 	private PersonaConverter personaConverter;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	public PersonaDTO findById(Long id) {
 
@@ -63,12 +67,16 @@ public class PersonaService {
 		}
 
 		if (persona.getId() == null && persona.getRol() != null && persona.getRol() != RolEnum.R) {
-			UsuarioEntity usr = new UsuarioEntity(persona.getEmail(), " ", true);
+			UsuarioEntity usr = new UsuarioEntity(persona.getEmail(), passwordEncoder.encode("usuario"), true);
 			usr = usuarioRepository.save(usr);
-			PermisoEntity per = new PermisoEntity(persona.getEmail(), persona.getRol().getId(), usr);
+			PermisoEntity per = new PermisoEntity(persona.getEmail(), "ROLE_" + persona.getRol().getId(), usr);
 			per = permisoRepository.save(per);
 		}
 
+		if(persona.getApellidos() == null) {
+			persona.setApellidos("");
+		}
+		
 		PersonaEntity guardado = personaRepository.save(personaConverter.convert(persona));
 
 		return personaConverter.convert(guardado);
@@ -100,12 +108,12 @@ public class PersonaService {
 
 
 
-	public void actualizarPass(String email, String pass1) {
+	public void actualizarPass(String email, String pass) {
 		
 		Optional<UsuarioEntity> usr = usuarioRepository.findById(email);
 		
 		if(usr != null) {
-			usr.get().setPassw(pass1);
+			usr.get().setPassw(passwordEncoder.encode(pass));
 			usuarioRepository.save(usr.get());
 		}
 	}

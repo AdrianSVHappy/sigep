@@ -10,10 +10,10 @@
 <body class="d-flex flex-column" style="min-height: 100vh;">
 	<!-- Navbar -->
 	<header th:insert="~{fragments/menu.html :: menu-profe}"
-		th:if="${persona != null and persona.rol == T(es.asv.sigep.enums.RolEnum).P}">
+		sec:authorize="hasRole('P')">
 	</header>
 	<header th:insert="~{fragments/menuAlumno.html :: menu-alumno}"
-		th:if="${persona != null and persona.rol == T(es.asv.sigep.enums.RolEnum).E}"></header>
+		sec:authorize="hasRole('E')"></header>
 
 	<!-- Contenedor principal -->
 	<div class="container mt-5 flex-grow-1">
@@ -123,9 +123,9 @@
 
 	<!-- Footer -->
 	<footer th:insert="~{fragments/footer.html :: footer}" class="bg-dark text-white py-4 mt-5"
-		th:if="${persona != null and persona.rol == T(es.asv.sigep.enums.RolEnum).P}"></footer>
+		sec:authorize="hasRole('P')"></footer>
 	<footer th:insert="~{fragments/footerAlumno.html :: footer-alumno}" class="bg-dark text-white py-4 mt-5"
-		th:if="${persona != null and persona.rol == T(es.asv.sigep.enums.RolEnum).E}"></footer>
+		sec:authorize="hasRole('E')"></footer>
 
 
 	<!-- jQuery -->

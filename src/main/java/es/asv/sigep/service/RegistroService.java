@@ -51,13 +51,13 @@ public class RegistroService {
 
 	}
 
-	public List<RegistroDTO> findAllByPractica(Long idPractica) { 
+	public List<RegistroDTO> findAllByPracticaOrderByFechaAsc(Long idPractica) { 
 		
 		PracticaEntity practicaEntity = practicaRepository.findById(idPractica).orElse(null);
 		List<RegistroDTO> listaDto = new ArrayList<>();
 		
 		if(practicaEntity != null) {
-			List<RegistroEntity> listaEntity = registroRepository.findAllByPractica(practicaEntity);
+			List<RegistroEntity> listaEntity = registroRepository.findAllByPracticaOrderByFechaAsc(practicaEntity);
 		
 			for (RegistroEntity entity : listaEntity) {
 				listaDto.add(registroConverter.convert(entity));
@@ -98,5 +98,9 @@ public class RegistroService {
 			}
 		}
 		return ret;
+	}
+
+	public boolean existsById(Long id) {
+		return registroRepository.existsById(id);
 	}
 }

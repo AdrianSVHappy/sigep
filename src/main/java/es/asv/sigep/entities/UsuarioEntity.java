@@ -23,7 +23,7 @@ public class UsuarioEntity {
 	@Column(name = "username", nullable = false,  length = 50)
 	private String user;
 	
-	@Column(name = "password", nullable = false,  length = 50)
+	@Column(name = "password", nullable = false,  length = 250)
 	private String passw;
 	
 	@Column(name = "enabled", nullable = false)

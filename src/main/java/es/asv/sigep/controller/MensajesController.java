@@ -96,9 +96,7 @@ public class MensajesController {
 
 		if ((ControllerUtils.obtenerUsuario(personaService).getRol() == RolEnum.P) && (mensaje.getReceptor().getId() != -1)
 				&& (!practicaService.existsByTutorAndAlumno(ControllerUtils.obtenerUsuario(personaService), mensaje.getReceptor()))) {
-
-			// TODO Hacer error el tutor y el alumno no tienen relación
-			return ControllerUtils.mostarError(0, model);
+			return ControllerUtils.mostarError(3, personaService , model);
 
 		}
 
@@ -113,7 +111,7 @@ public class MensajesController {
 
 			// Establecer datos del receptor para alumno
 			if (ControllerUtils.obtenerUsuario(personaService).getRol() == RolEnum.E)
-				mensaje.setReceptor(practicaService.findByAlumno(ControllerUtils.obtenerUsuario(personaService).getId()).getTutor());
+				mensaje.setReceptor(practicaService.findByAlumno(ControllerUtils.obtenerUsuario(personaService)).getTutor());
 
 			mensajeService.save(mensaje);
 

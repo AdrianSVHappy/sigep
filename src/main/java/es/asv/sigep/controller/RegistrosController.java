@@ -255,7 +255,7 @@ public class RegistrosController {
 	@GetMapping("/registros/{id}")
 	public String mostrarRegistros(@PathVariable("id") Long id, Model model) {
 
-		if (!registroService.existsById(id)) {
+		if (!practicaService.existsById(id)) {
 			return ControllerUtils.mostarError(3, personaService, model);
 		}
 

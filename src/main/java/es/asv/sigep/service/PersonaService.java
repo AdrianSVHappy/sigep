@@ -119,4 +119,8 @@ public class PersonaService {
 	public boolean existsByEmail(String email) {
 		return personaRepository.existsByEmail(email);
 	}
+
+	public boolean existsByEmailAndIdNot(String email, Long id) {
+		return personaRepository.existsByEmailAndIdNot(email, id);
+	}
 }

@@ -182,8 +182,14 @@ public class PersonaController {
 			return ControllerUtils.mostarError(0, personaService, model);
 		}
 
-		if (personaService.existsByEmail(personaForm.getEmail())) {
-			return ControllerUtils.mostarError(8, personaService, model);
+		if (personaForm.getId() == null) {
+			if (personaService.existsByEmail(personaForm.getEmail())) {
+				return ControllerUtils.mostarError(8, personaService, model);
+			}
+		} else {
+			if (personaService.existsByEmailAndIdNot(personaForm.getEmail(), personaForm.getId())) {
+				return ControllerUtils.mostarError(8, personaService, model);
+			}
 		}
 
 		personaForm.setOrganizacion(personaService.findById(personaForm.getId()).getOrganizacion());

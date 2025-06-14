@@ -261,6 +261,19 @@ public class PracticasController {
 			practicaForm.getResponsable().setOrganizacion(practicaForm.getEmpresa());
 			practicaForm.getResponsable().setUbicacion(practicaForm.getEmpresa().getUbicacion());
 		}
+		
+		
+		if (practicaForm.getResponsable().getId() == null) {
+			if (personaService.existsByEmail(practicaForm.getResponsable().getEmail())) {
+				return ControllerUtils.mostarError(8, personaService, model);
+			}
+		} else {
+
+			if (personaService.existsByEmailAndIdNot(practicaForm.getResponsable().getEmail(), practicaForm.getResponsable().getId())) {
+				return ControllerUtils.mostarError(8, personaService, model);
+			}
+		}
+		
 
 		practicaService.save(practicaForm);
 
@@ -297,10 +310,10 @@ public class PracticasController {
 			return ControllerUtils.mostarError(7, personaService, model);
 		}
 
-		if(personaService.existsByEmail(practica.getAlumno().getEmail()) || personaService.existsByEmail(practica.getResponsable().getEmail())) {
+		if (personaService.existsByEmail(practica.getAlumno().getEmail())) {
 			return ControllerUtils.mostarError(8, personaService, model);
 		}
-		
+
 		return null;
 	}
 
@@ -399,6 +412,17 @@ public class PracticasController {
 			}
 		}
 
+		if (practicaDB.getResponsable().getId() == null) {
+			if (personaService.existsByEmail(practicaDB.getResponsable().getEmail())) {
+				return ControllerUtils.mostarError(8, personaService, model);
+			}
+		} else {
+
+			if (personaService.existsByEmailAndIdNot(practicaDB.getResponsable().getEmail(), practicaDB.getResponsable().getId())) {
+				return ControllerUtils.mostarError(8, personaService, model);
+			}
+		}
+		
 		practicaService.save(practicaDB);
 
 		return mostarDetalle(practicaDB, model);

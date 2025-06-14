@@ -160,4 +160,8 @@ public class PracticaService {
 
 	}
 
+	public boolean existsById(Long id) {
+		return practicaRepository.existsById(id);
+	}
+
 }

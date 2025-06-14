@@ -24,22 +24,22 @@
 
 				<div class="mb-3">
 					<label for="nombre" class="form-label">Nombre</label>
-					<input type="text" th:field="*{nombre}" class="form-control" id="nombre" required />
+					<input type="text" th:field="*{nombre}" class="form-control" id="nombre" required maxlength="50"/>
 				</div>
 
 				<div class="mb-3">
 					<label for="apellidos" class="form-label">Apellidos</label>
-					<input type="text" th:field="*{apellidos}" class="form-control" id="apellidos" required />
+					<input type="text" th:field="*{apellidos}" class="form-control" id="apellidos" required  maxlength="100"/>
 				</div>
 
 				<div class="mb-3">
 					<label for="email" class="form-label">Email</label>
-					<input type="email" th:field="*{email}" class="form-control" id="email" required readonly />
+					<input type="email" th:field="*{email}" class="form-control" id="email" required readonly/>
 				</div>
 
 				<div class="mb-3">
 					<label for="telefono" class="form-label">Teléfono</label>
-					<input type="text" th:field="*{telefono}" class="form-control" id="telefono" />
+					<input type="text" th:field="*{telefono}" class="form-control" id="telefono" maxlength="14"/>
 				</div>
 
 				<a th:href="@{/persona/cambiarPassw}" class="btn btn-primary" th:if="*{id != null}">Cambiar
@@ -78,28 +78,28 @@
 
 				<div class="mb-3">
 					<label for="pais" class="form-label">País</label>
-					<input type="text" th:field="*{ubicacion.pais}" class="form-control" id="pais" required />
+					<input type="text" th:field="*{ubicacion.pais}" class="form-control" id="pais" required maxlength="50"/>
 				</div>
 
 				<div class="mb-3">
 					<label for="comunidad" class="form-label">Comunidad</label>
-					<input type="text" th:field="*{ubicacion.comunidad}" class="form-control" id="comunidad" required />
+					<input type="text" th:field="*{ubicacion.comunidad}" class="form-control" id="comunidad" required maxlength="50"/>
 				</div>
 
 				<div class="mb-3">
 					<label for="provincia" class="form-label">Provincia</label>
-					<input type="text" th:field="*{ubicacion.provincia}" class="form-control" id="provincia" required />
+					<input type="text" th:field="*{ubicacion.provincia}" class="form-control" id="provincia" required maxlength="50"/>
 				</div>
 
 				<div class="mb-3">
 					<label for="ciudad" class="form-label">Ciudad</label>
-					<input type="text" th:field="*{ubicacion.ciudad}" class="form-control" id="ciudad" required />
+					<input type="text" th:field="*{ubicacion.ciudad}" class="form-control" id="ciudad" required maxlength="100"/>
 				</div>
 
 				<div class="mb-3">
 					<label for="codigoPostal" class="form-label">Código Postal</label>
 					<input type="text" th:field="*{ubicacion.codigoPostal}" class="form-control" id="codigoPostal"
-						required />
+						required maxlength="5"/>
 				</div>
 
 				<div class="mb-3">

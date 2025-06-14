@@ -66,7 +66,7 @@ public class ControllerUtils {
 		modelPersona(ser, model);
 		modelFooter(model);
 		model.addAttribute("mensaje", msj);
-		return "Error";
+		return "error";
 
 	}
 

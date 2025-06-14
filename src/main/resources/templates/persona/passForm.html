@@ -27,9 +27,9 @@
 			<input type="text" id="pass2" name="pass2"><br><br>
 
 			<div class="d-flex justify-content-between">
-				<a th:href="@{/persona/detalle/{id}(id=${persona.id})}" class="btn btn-secondary"
-					th:if="*{id != null}">Volver</a>
+				<a th:href="@{/persona/detalle/{id}(id=${persona.id})}" class="btn btn-secondary">Volver</a>
 
+					
 				<button type="submit" class="btn btn-primary">Guardar</button>
 			</div>
 		</form>

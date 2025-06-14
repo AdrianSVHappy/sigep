@@ -40,22 +40,22 @@
 				<!--Campos para el nuevo responsables-->
 				<div class="mb-3">
 					<label for="rNombre" class="form-label">Nombre</label>
-					<input type="text" th:field="*{responsable.nombre}" class="form-control" id="rNombre" />
+					<input type="text" th:field="*{responsable.nombre}" class="form-control" id="rNombre" maxlength="50"/>
 				</div>
 
 				<div class="mb-3">
 					<label for="rApellidos" class="form-label">Apellidos</label>
-					<input type="text" th:field="*{responsable.apellidos}" class="form-control" id="rApellidos" />
+					<input type="text" th:field="*{responsable.apellidos}" class="form-control" id="rApellidos" maxlength="100"/>
 				</div>
 
 				<div class="mb-3">
 					<label for="rEmail" class="form-label">Email</label>
-					<input type="email" th:field="*{responsable.email}" class="form-control" id="rEmail" />
+					<input type="email" th:field="*{responsable.email}" class="form-control" id="rEmail"/>
 				</div>
 
 				<div class="mb-3">
 					<label for="rTelefono" class="form-label">Teléfono</label>
-					<input type="tel" th:field="*{responsable.telefono}" class="form-control" id="rTelefono" />
+					<input type="tel" th:field="*{responsable.telefono}" class="form-control" id="rTelefono"  maxlength="14"/>
 				</div>
 
 			</div>

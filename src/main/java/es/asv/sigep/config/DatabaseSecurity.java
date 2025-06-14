@@ -27,7 +27,7 @@ public class DatabaseSecurity {
 				.requestMatchers("/persona/alumnos", "/practica/form/*", "/practica/practicas", "/practica/nueva",
 						"/registro/registros/*")
 				.hasRole("P").requestMatchers("/registro/calendario/*", "/registro/fecha/*").hasRole("E")
-				.requestMatchers("/", "/registrar", "/guardarProfe", "error").permitAll().anyRequest().authenticated())
+				.requestMatchers("/", "/registrar", "/guardarProfe", "/error").permitAll().anyRequest().authenticated())
 				.formLogin(form -> form.permitAll());
 
 		return http.build();
@@ -43,7 +43,4 @@ public class DatabaseSecurity {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-
-	// TODO encirptar contraseña
-
 }

@@ -29,6 +29,7 @@ public class PracticasController {
 	@Autowired
 	private PracticaService practicaService;
 
+	//TODO cmprobar que no se repite el correo del alumno
 	@Autowired
 	private PersonaService personaService;
 

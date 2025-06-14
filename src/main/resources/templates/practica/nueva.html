@@ -23,7 +23,7 @@
 
 				<div class="mb-3">
 					<label for="duracion" class="form-label">Duración (h)</label>
-					<input type="number" th:field="*{duracion}" class="form-control" id="duracion" min="0	" required/>
+					<input type="number" th:field="*{duracion}" class="form-control" id="duracion" min="0" required/>
 				</div>
 				
 				<div class="row mb-3">
@@ -40,7 +40,7 @@
 				
 				<div class="mb-3">
 					<label for="nss" class="form-label">Número de la Seguridad Social</label>
-					<input type="text" th:field="*{numeroSeguridadSocial}" class="form-control" id="nss" />
+					<input type="text" th:field="*{numeroSeguridadSocial}" class="form-control" id="nss" maxlength="12"/>
 				</div>
 
 

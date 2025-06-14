@@ -12,8 +12,7 @@
 	<!-- Navbar -->
 	<header th:insert="~{fragments/menu.html :: menu-profe}" sec:authorize="hasRole('P')">
 	</header>
-	<header th:insert="~{fragments/menuAlumno.html :: menu-alumno}"
-		sec:authorize="hasRole('E')"></header>
+	<header th:insert="~{fragments/menuAlumno.html :: menu-alumno}" sec:authorize="hasRole('E')"></header>
 
 	<!-- Contenido principal -->
 	<div class="container mt-5 flex-grow-1">
@@ -23,32 +22,31 @@
 			<!-- Receptor -->
 			<div class="form-group" sec:authorize="hasRole('P')">
 				<label for="receptor">Receptor</label>
-				<select class="form-control" id="receptor" th:field="*{receptor.id}" >
-					<option value=-1  selected>Todos</option>
+				<select class="form-control" id="receptor" th:field="*{receptor.id}">
+					<option value=-1 selected>Todos</option>
 					<option th:each="persona : ${receptores}" th:value="${persona.id}"
 						th:text="${persona.nombre + ' ' + persona.apellidos}">
 					</option>
 				</select>
 			</div>
 
-
 			<!-- Asunto -->
 			<div class="form-group">
 				<label for="asunto">Asunto</label>
 				<input type="text" class="form-control" id="asunto" th:field="*{asunto}"
-					placeholder="Introduce el asunto">
+					placeholder="Introduce el asunto" maxlength="50">
 			</div>
 
 			<!-- Texto -->
 			<div class="form-group">
 				<label for="texto">Texto</label>
 				<textarea class="form-control" id="texto" rows="5" th:field="*{texto}"
-					placeholder="Escribe tu mensaje"></textarea>
+					placeholder="Escribe tu mensaje" maxlength="200"></textarea>
 			</div>
 
 			<div class="d-flex justify-content-between mt-3">
 				<a th:href="@{/mensaje/mensajes}" class="btn btn-secondary">Volver</a>
-			  <button type="submit" class="btn btn-primary">Enviar</button>
+				<button type="submit" class="btn btn-primary">Enviar</button>
 			</div>
 		</form>
 	</div>

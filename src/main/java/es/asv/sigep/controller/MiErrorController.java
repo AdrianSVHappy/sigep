@@ -11,7 +11,7 @@ import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
-public class MiErrorController {
+public class MiErrorController implements ErrorController {
 
 	@Autowired
 	private PersonaService personaService;
@@ -38,6 +38,10 @@ public class MiErrorController {
 		ControllerUtils.modelPersona(personaService, model);
 
 		return "error";
+	}
+
+	public String getErrorPath() {
+		return "/error";
 	}
 
 }
